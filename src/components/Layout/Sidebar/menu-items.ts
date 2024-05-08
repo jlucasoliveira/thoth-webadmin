@@ -10,6 +10,7 @@ import { StockRoutes } from '@/features/stock/routes/constants';
 import { ProductRoutes } from '@/features/products/routes/constants';
 import { DashboardRoutes } from '@/features/dashboard/routes/constants';
 import { BrandsRoutes } from '@/features/brands/routes/constants';
+import { CategoriesRoutes } from '@/features/categories/routes/constants';
 
 type _Children = {
   label: string;
@@ -51,6 +52,12 @@ export const options: Menu = {
       label: 'Marcas',
       icon: FornecedoresIcon,
       to: BrandsRoutes.List,
+    },
+    {
+      id: 'categories',
+      label: 'Categorias',
+      icon: FornecedoresIcon,
+      to: CategoriesRoutes.List,
     },
     {
       id: 'products',
