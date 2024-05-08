@@ -1,3 +1,4 @@
+import { NotFound } from '@/components/Layout/NotFound';
 import { EntryRoute } from '@/components/Routers';
 import { lazyImport } from '@/utils/lazyImport';
 import { RouteObject } from 'react-router-dom';
@@ -12,6 +13,10 @@ const publicRoutes: RouteObject[] = [
   {
     path: '/auth/*',
     element: <AuthRoutes />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ];
 
