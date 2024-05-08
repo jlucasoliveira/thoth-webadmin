@@ -5,14 +5,14 @@ import { extractChangedValues } from '@/utils/helpers';
 import { FormType, CategoryManageForm } from '../components/CategoryManageForm';
 import { Payload, useCreateCategory } from '../api/createCategory';
 import { useCategoryPartialUpdate } from '../api/partialUpdateCateory';
-import { useGetBrand } from '../api/getCategory';
+import { useGetCategory } from '../api/getCategory';
 import { CategoriesRoutes } from './constants';
 
 function CategoryManage() {
   const { id } = useParams<Params>();
   const { isEdit } = useFilters();
   const navigate = useNavigate();
-  const supplier = useGetBrand({ id });
+  const supplier = useGetCategory({ id });
   const creation = useCreateCategory();
   const update = useCategoryPartialUpdate();
 

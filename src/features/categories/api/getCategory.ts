@@ -1,27 +1,27 @@
 import { axios } from '@/lib/axios';
 import { ExtractFnReturnType, QueryConfig } from '@/lib/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { BrandModel } from '../types';
+import { CategoryModel } from '../types';
 
-async function getBrand(id: string) {
-  const { data } = await axios.get<BrandModel>(`/brands/${id}`);
+async function getCategory(id: string) {
+  const { data } = await axios.get<CategoryModel>(`/categories/${id}`);
   return data;
 }
 
-type QueryFnType = typeof getBrand;
+type QueryFnType = typeof getCategory;
 
-type UseGetBrand = {
+type UseGetCategory = {
   config?: QueryConfig<QueryFnType>;
   id?: string;
 };
 
-function useGetBrand({ config, id }: UseGetBrand) {
+function useGetCategory({ config, id }: UseGetCategory) {
   return useQuery<ExtractFnReturnType<QueryFnType>>({
     ...config,
-    queryKey: ['fetch-brand', id],
-    queryFn: () => getBrand(id!),
+    queryKey: ['fetch-category', id],
+    queryFn: () => getCategory(id!),
     enabled: !!id,
   });
 }
 
-export { getBrand, useGetBrand };
+export { getCategory, useGetCategory };
