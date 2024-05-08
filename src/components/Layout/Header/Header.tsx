@@ -1,4 +1,5 @@
 import { IconButton, Flex, Center, Button } from '@chakra-ui/react';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { useUserStore } from '@/stores/user';
 import { SignOut } from '@/components/Elements';
@@ -9,12 +10,12 @@ import { ReactComponent as SignOutIcon } from '@/assets/icons/navigation/signOut
 
 type Header = {
   isOpen?: boolean;
+  isSmall?: boolean;
   onToggle?: () => void;
 };
 
-function Header({ isOpen = true, onToggle }: Header) {
+function Header({ isOpen = true, isSmall = false, onToggle }: Header) {
   const { user } = useUserStore();
-
   const Icon = isOpen ? LeftArrow : RightArrow;
 
   return (
@@ -28,21 +29,37 @@ function Header({ isOpen = true, onToggle }: Header) {
       borderBottomStyle="solid"
       borderBottomColor="gray.450"
     >
+      {isSmall ? (
+        <Center>
+          <IconButton
+            ml={8}
+            aria-label="Abrir menu"
+            colorScheme="blue"
+            icon={<HamburgerIcon color="white" width="16px" height="16px" />}
+            h="32px"
+            w="32px"
+            minW="32px"
+            onClick={onToggle}
+          />
+        </Center>
+      ) : null}
       <Center aria-label="Logo do Cabeçalho" my="5px">
-        <Logo height={50} width={200} aria-label="Thoth Logo" />
-        <IconButton
-          aria-label="Fechar menu"
-          rounded="full"
-          bg="white"
-          borderStyle="solid"
-          borderWidth="1px"
-          borderColor="gray.560"
-          icon={<Icon width="16px" height="16px" />}
-          h="32px"
-          w="32px"
-          minW="32px"
-          onClick={onToggle}
-        />
+        <Logo height={45} width={200} aria-label="Thoth Logo" />
+        {isSmall ? null : (
+          <IconButton
+            aria-label="Fechar menu"
+            rounded="full"
+            bg="white"
+            borderStyle="solid"
+            borderWidth="1px"
+            borderColor="gray.560"
+            icon={<Icon width="16px" height="16px" />}
+            h="32px"
+            w="32px"
+            minW="32px"
+            onClick={onToggle}
+          />
+        )}
       </Center>
       <Center aria-label="menu">
         <SignOut size="sm" colorScheme="blue" rightIcon={<SignOutIcon />} />

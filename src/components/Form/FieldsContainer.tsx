@@ -1,5 +1,5 @@
 import { ReactNode, useMemo, CSSProperties, PropsWithChildren } from 'react';
-import { Flex, Grid, GridItem, GridProps, Text, TextProps } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, GridProps, Text, TextProps, useMediaQuery } from '@chakra-ui/react';
 
 type FieldsContainer = {
   templateColumn?: number | string;
@@ -23,6 +23,8 @@ function FieldsContainer({
   rightButton,
   titleProps,
 }: PropsWithChildren<FieldsContainer>) {
+  const [isSmallScreenSize] = useMediaQuery('(max-width: 700px)');
+
   const groupedFields = useMemo<ReactNode[][]>(() => {
     if (!Array.isArray(children)) return [[children]];
     let step = columnsByRow;
@@ -49,7 +51,11 @@ function FieldsContainer({
         <Grid
           key={idx.toString()}
           templateColumns={
-            typeof templateColumn === 'number' ? `repeat(${templateColumn}, 1fr)` : templateColumn
+            isSmallScreenSize
+              ? '1fr'
+              : typeof templateColumn === 'number'
+                ? `repeat(${templateColumn}, 1fr)`
+                : templateColumn
           }
           columnGap={columnGap}
           alignItems="flex-end"

@@ -22,6 +22,7 @@ type ItemWrapper = CommonProps & {
   children: ReactNode;
   hasChild: boolean;
   toggle?: () => void;
+  onClose?: () => void;
   to?: string;
 };
 
@@ -40,7 +41,7 @@ function ItemWrapper(props: ItemWrapper) {
   if (props.hasChild || props.isDisabled)
     return (
       <Text
-        onClick={props.toggle}
+        onClick={props.onClose ?? props.toggle}
         userSelect="none"
         {...customProps}
         cursor={props.isDisabled ? 'not-allowed' : 'pointer'}
@@ -60,9 +61,10 @@ type ItemProps = CommonProps & {
   child: Children;
   isChild?: boolean;
   isSidebarOpen?: boolean;
+  onClose?: () => void;
 };
 
-function Item({ child, isChild, isDisabled, isSidebarOpen = true }: ItemProps) {
+function Item({ child, isChild, isDisabled, onClose, isSidebarOpen = true }: ItemProps) {
   const { pathname } = useLocation();
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen: Array.isArray(child.id) ? child.id.some((id) => pathname.includes(id)) : false,
@@ -86,6 +88,7 @@ function Item({ child, isChild, isDisabled, isSidebarOpen = true }: ItemProps) {
         isActive={isActive}
         isDisabled={isDisabled}
         toggle={() => (isDisabled ? undefined : onToggle())}
+        onClose={onClose}
       >
         <ListItem
           ml={isChild && isSidebarOpen ? 5 : 0}
