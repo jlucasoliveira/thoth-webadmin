@@ -1,5 +1,3 @@
-import { UserTypesEnum } from '@/features/auth/types';
-
 class StorageService {
   private readonly PREFIX = 'thoth';
 
@@ -13,10 +11,6 @@ class StorageService {
 
   clearToken(): void {
     window.localStorage.removeItem(`${this.PREFIX}_token`);
-  }
-
-  getUserProfile(): UserTypesEnum | null {
-    return window.localStorage.getItem(`${this.PREFIX}_user_profile`) as UserTypesEnum | null;
   }
 }
 
