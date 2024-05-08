@@ -42,7 +42,7 @@ const theme = extendTheme({
       green: '#0FDB62',
       darkGreen: '#009CA6',
       redAlpha: '#FFEFEF',
-      blueAlpha: '#3182ce90',
+      blueAlpha: '#005e7d90',
       neuterBlack: '#1B1A1A',
       gray: '#656263',
     },
