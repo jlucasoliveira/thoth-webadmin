@@ -1,5 +1,6 @@
-import React, { ElementType } from 'react';
+import { ElementType, ReactNode, useMemo } from 'react';
 import * as yup from 'yup';
+import { Helmet } from 'react-helmet';
 import {
   Button,
   Flex,
@@ -29,6 +30,12 @@ const defaultValues: FormType = {
   search: '',
 };
 
+type Tab = {
+  title?: string;
+  tab: string;
+  component: ReactNode;
+};
+
 type ListWrapper<T> = {
   title: string;
   registrationRoute?: string;
@@ -37,10 +44,8 @@ type ListWrapper<T> = {
   FilterElement?: ElementType;
   addButtonText?: string;
   List?: ElementType | null;
-  searchField?: string;
-  tabListTitle?: string[];
-  tabList?: string[];
-  tabComponents?: React.JSX.Element[];
+  searchField?: keyof T | string;
+  tabs?: Tab[];
   containerProps?: FlexProps;
 };
 
@@ -49,14 +54,12 @@ function ListWrapper<T>({
   title,
   addButtonText,
   filters = [],
-  tabListTitle = [],
   searchField = 'name', // TODO: Turn this prop required
   List = null,
   ButtonAction,
   FilterElement,
-  tabList = [],
-  tabComponents = [],
   containerProps,
+  tabs = [],
 }: ListWrapper<T>) {
   const navigate = useNavigate();
   const { currentTab, addFilter, changeTab, removeFilter } = useFilters();
@@ -66,6 +69,11 @@ function ListWrapper<T>({
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
+
+  const memoTitle = useMemo(
+    () => (tabs.length > 0 ? tabs[currentTab]?.title ?? tabs[currentTab].tab : title),
+    [title, currentTab, tabs]
+  );
 
   function onSubmit({ search }: FormType) {
     addFilter(searchField as never, 'ilike', search);
@@ -82,11 +90,14 @@ function ListWrapper<T>({
         direction="row"
         justifyContent="space-between"
         w="full"
-        mb={tabList.length ? 0 : '16px'}
+        mb={tabs.length ? 0 : '16px'}
         alignItems="center"
       >
+        <Helmet>
+          <title>{memoTitle}</title>
+        </Helmet>
         <Heading color="gray.800" fontSize="1.25rem">
-          {tabListTitle.length ? tabListTitle[currentTab] : title}
+          {memoTitle}
         </Heading>
         <Flex direction="row" alignItems="center">
           <Search
@@ -119,7 +130,7 @@ function ListWrapper<T>({
         </Flex>
       </Flex>
 
-      {tabList.length ? (
+      {tabs.length > 0 ? (
         <Tabs
           flex={1}
           display="flex"
@@ -130,15 +141,15 @@ function ListWrapper<T>({
           isLazy
         >
           <TabList>
-            {tabList.map((item) => (
-              <Tab key={item} fontSize="0.75rem">
-                {item}
+            {tabs.map(({ tab }) => (
+              <Tab key={tab} fontSize="0.75rem">
+                {tab}
               </Tab>
             ))}
           </TabList>
 
           <TabPanels flexGrow={1} display="flex">
-            {tabComponents.map((component, idx: number) => (
+            {tabs.map(({ component }, idx: number) => (
               <TabPanel key={idx} flexGrow={1} px={0} pb={0} display="flex">
                 {component}
               </TabPanel>
