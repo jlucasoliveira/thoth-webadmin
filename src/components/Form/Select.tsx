@@ -20,10 +20,14 @@ function Select<T extends FieldValues>({ options = [], ...props }: Props<T>) {
     <FieldWrapper {...props}>
       {({ field, fieldState }) => (
         <ChakraSelect
+          _disabled={{
+            backgroundColor: 'blackAlpha.100',
+            color: 'blackAlpha.500',
+          }}
           {...field}
           {...props}
           isInvalid={fieldState.invalid}
-          errorBorderColor="blue.300"
+          errorBorderColor="red.300"
         >
           {options.map((option) => (
             <Fragment key={option.value.toString()}>

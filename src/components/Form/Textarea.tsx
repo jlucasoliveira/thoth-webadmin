@@ -11,10 +11,11 @@ function Textarea<T extends FieldValues>(props: TextareaProps<T>) {
     <FieldWrapper {...props}>
       {({ field, fieldState }) => (
         <ChakraTextarea
+          _disabled={{ backgroundColor: 'blackAlpha.100' }}
           {...field}
           {...props}
           isInvalid={fieldState.invalid}
-          errorBorderColor="blue.300"
+          errorBorderColor="red.300"
         />
       )}
     </FieldWrapper>

@@ -70,9 +70,9 @@ function Input<T extends FieldValues>({
             onChange={(e) => field.onChange(handleChange(e) as FieldPathValue<T, Path<T>>)}
             value={getValue(field)}
             isInvalid={fieldState.invalid}
-            errorBorderColor="blue.300"
+            errorBorderColor="red.300"
             type={props.type === 'password' ? (show ? 'text' : 'password') : props.type}
-            _disabled={{ bgColor: 'gray.60' }}
+            _disabled={{ bgColor: 'blackAlpha.100' }}
           />
           {rightElement ? (
             <InputRightElement>{rightElement}</InputRightElement>
