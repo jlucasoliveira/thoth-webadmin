@@ -11,7 +11,6 @@ import { ProductRoutes } from '@/features/products/routes/constants';
 import { DashboardRoutes } from '@/features/dashboard/routes/constants';
 import { BrandsRoutes } from '@/features/brands/routes/constants';
 import { CategoriesRoutes } from '@/features/categories/routes/constants';
-import { GendersRoutes } from '@/features/genders/routes/constants';
 
 type _Children = {
   label: string;
@@ -59,12 +58,6 @@ export const options: Menu = {
       label: 'Categorias',
       icon: FornecedoresIcon,
       to: CategoriesRoutes.List,
-    },
-    {
-      id: 'genders',
-      label: 'Gêneros',
-      icon: FornecedoresIcon,
-      to: GendersRoutes.List,
     },
     {
       id: 'products',
