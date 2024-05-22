@@ -1,5 +1,4 @@
 import { Select as ChakraSelect, SelectProps } from '@chakra-ui/react';
-import React, { Fragment } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { FieldWrapper, FieldWrapperProps } from './FieldWrapper';
 
@@ -30,12 +29,9 @@ function Select<T extends FieldValues>({ options = [], ...props }: Props<T>) {
           errorBorderColor="red.300"
         >
           {options.map((option) => (
-            <Fragment key={option.value.toString()}>
-              <option value="" selected disabled hidden>
-                Escolha
-              </option>
-              <option value={option.value}>{option.label}</option>
-            </Fragment>
+            <option key={option.value.toString()} value={option.value}>
+              {option.label}
+            </option>
           ))}
         </ChakraSelect>
       )}
