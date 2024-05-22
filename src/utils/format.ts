@@ -34,3 +34,8 @@ export function zipCodeMask(zipCode: string): string {
   zipCode = zipCode.replace(/(\d{5})(\d)/, '$1-$2');
   return zipCode;
 }
+
+export function capitalize(text: string): string {
+  const first = text.charAt(0);
+  return text.replace(first, first.toUpperCase());
+}
