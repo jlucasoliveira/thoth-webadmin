@@ -2,6 +2,8 @@ import { Button, ButtonProps, Flex, Heading, IconButton } from '@chakra-ui/react
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { ElementType, ReactNode, SyntheticEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { capitalize } from '@/utils/format';
 import { SaveDialog } from './SaveDialog';
 
 type SubHeader = {
@@ -50,6 +52,9 @@ function SubHeader({
         />
         {title}
       </Heading>
+      <Helmet>
+        <title>{capitalize(title)}</title>
+      </Helmet>
       <Flex direction="row" alignItems="center">
         {leftActions}
         {hideDefaultActions ? null : (
