@@ -1,21 +1,11 @@
-import { useCallback, useState } from 'react';
-import { FieldValues, Path, PathValue, useController } from 'react-hook-form';
-import {
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  IconButton,
-  Image,
-  Skeleton,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { ViewIcon } from '@chakra-ui/icons';
+import { useCallback } from 'react';
+import { FieldValues, Path, PathValue, useController, useWatch } from 'react-hook-form';
+import { Flex, FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { ReactComponent as UploadIcon } from '@/assets/icons/navigation/upload.svg';
-import { useGetSignedURI } from '@/features/attachments/api/getSignedURI';
 import { useGetAttachment } from '@/features/attachments/api/getAttachment';
-import { Loading, Preview } from '../Elements';
+import { Preview } from '../Elements';
 import { FieldWrapperProps } from '.';
+import { basename } from '@/features/attachments/utils';
 
 type Props<T extends FieldValues = FieldValues> = {
   nameURLField: Path<T>;
@@ -29,31 +19,15 @@ function FileInput<T extends FieldValues>({
   width = 25,
   ...props
 }: Props<T>) {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [preview, setPreview] = useState<string | undefined>();
-  const { mutateAsync, isLoading } = useGetSignedURI();
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const {
-    field: { value },
-  } = useController({ control: props.control, name: nameURLField });
+  const object = useWatch({ control: props.control, name: nameURLField });
   const { field, fieldState } = useController({ control: props.control, name: props.name });
-  const attachment = useGetAttachment({ id: value?.id });
-
-  function handlePreUploadPreview(file: File) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      if (e?.target?.result) setPreview(e.target!.result as string);
-    };
-    reader.readAsDataURL(file);
-  }
+  const attachment = useGetAttachment({ id: object?.id });
 
   const handleChange = useCallback(
     async (file: File) => {
-      handlePreUploadPreview(file);
-      const remote = await mutateAsync(file.name);
-      field.onChange({ file, remote } as PathValue<T, Path<T>>);
+      field.onChange(file as PathValue<T, Path<T>>);
     },
-    [field, mutateAsync]
+    [field]
   );
 
   return (
@@ -66,9 +40,10 @@ function FileInput<T extends FieldValues>({
           borderRadius="md"
           p="4px"
           fontSize="md"
-          borderColor={fieldState.invalid ? 'blue.300' : isDisabled ? 'gray.100' : 'gray.300'}
+          borderColor={fieldState.invalid ? 'red.300' : isDisabled ? 'gray.100' : 'gray.300'}
           borderWidth={fieldState.invalid ? 2 : 1}
           justifyContent="space-between"
+          backgroundColor={isDisabled ? 'blackAlpha.100' : undefined}
         >
           <label
             htmlFor={isDisabled ? undefined : `file-input-${props.name}`}
@@ -85,30 +60,21 @@ function FileInput<T extends FieldValues>({
           >
             {field.value?.name ||
               field.value?.file?.name ||
-              value?.key ||
+              object?.key ||
               props.placeholder ||
-              attachment.data?.attachment?.key ||
+              basename(attachment.data?.key) ||
               'Selecione um arquivo'}
           </label>
           <Flex direction="row" alignItems="center">
             <div style={{ marginRight: 10 }}>
-              {isLoading ? (
-                <Loading size="sm" />
-              ) : (
-                <UploadIcon style={{ opacity: isDisabled ? 0.3 : 1 }} />
-              )}
+              <UploadIcon style={{ opacity: isDisabled ? 0.3 : 1 }} />
             </div>
-
-            {attachment.isFetching && attachment.isLoading ? (
-              <Loading size="sm" />
-            ) : attachment.data?.presignedGetUrl || field.value?.file ? (
-              <IconButton
-                aria-label="Ver arquivo"
-                variant="ghost"
-                icon={<ViewIcon />}
-                onClick={onOpen}
-              />
-            ) : null}
+            <Preview
+              title={props.label}
+              file={field.value}
+              attachment={attachment.data}
+              isLoading={attachment.isLoading && attachment.isFetching}
+            />
           </Flex>
         </Flex>
         {!fieldState.invalid ? <div style={{ minHeight: 'calc(19px + 0.5rem)' }} /> : null}
@@ -125,17 +91,6 @@ function FileInput<T extends FieldValues>({
           onChange={(e) => (e.target?.files?.[0] ? handleChange(e.target?.files?.[0]) : undefined)}
         />
       </FormControl>
-      <Preview title={props.label} isOpen={isOpen} onClose={onClose}>
-        <Skeleton isLoaded={imageLoaded}>
-          <Image
-            fit="contain"
-            boxSize="400px"
-            src={preview || attachment.data?.presignedGetUrl}
-            alt={props.label}
-            onLoad={() => setImageLoaded(true)}
-          />
-        </Skeleton>
-      </Preview>
     </>
   );
 }
