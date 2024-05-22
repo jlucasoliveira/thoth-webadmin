@@ -36,6 +36,9 @@ type Filters<T> = {
   previousPage: () => number;
   nextPage: (maxPage: number) => number;
   changeTab: (tabIndex: number, keep?: boolean) => void;
+  addParam: (param: string, value: string) => void;
+  removeParam: (param: string) => void;
+  getParam: (param: string) => string | null;
 };
 
 function useFilters<T>(
@@ -43,10 +46,12 @@ function useFilters<T>(
 ): Filters<T> {
   const [params, setParams] = useSearchParams();
 
-  const buildKey = useCallback(
-    (key: SearchParamsKeys) => `${context}${context ? '_' : ''}${key}`,
+  const buildKeyName = useCallback(
+    (param: string) => `${context}${context ? '_' : ''}${param}`,
     [context]
   );
+
+  const buildKey = useCallback((key: SearchParamsKeys) => buildKeyName(key), [buildKeyName]);
 
   const createFilterKeyValue = useCallback((initial = '', ...props: string[]) => {
     const keys = props.map((key) => `[${key}]`);
@@ -191,6 +196,31 @@ function useFilters<T>(
     [setParams, buildKey, createFilterKey, createFilterKeyValue]
   );
 
+  const addParam = useCallback(
+    (param: string, value: string) => {
+      setParams((params) => {
+        params.set(buildKeyName(param), value);
+        return params;
+      });
+    },
+    [buildKeyName, setParams]
+  );
+
+  const removeParam = useCallback(
+    (param: string) => {
+      setParams((params) => {
+        params.delete(buildKeyName(param));
+        return params;
+      });
+    },
+    [buildKeyName, setParams]
+  );
+
+  const getParam = useCallback(
+    (param: string) => params.get(buildKeyName(param)),
+    [buildKeyName, params]
+  );
+
   const addOrder = useCallback(
     (sort: Sort<T>) => {
       setParams((params) => {
@@ -309,6 +339,9 @@ function useFilters<T>(
     nextPage,
     previousPage,
     changeTab,
+    getParam,
+    addParam,
+    removeParam,
   };
 }
 
