@@ -19,6 +19,7 @@ type SubHeader = {
   SaveButton?: ElementType<ButtonProps>;
   isEditDisabled?: boolean;
   isHiddenSaveButton?: boolean;
+  goBack?: () => void;
   mb?: number;
 };
 
@@ -36,20 +37,18 @@ function SubHeader({
   hideDefaultActions = false,
   isHiddenSaveButton = false,
   mb = 5,
+  goBack,
 }: SubHeader) {
   const navigate = useNavigate();
+  if (!goBack) goBack = () => navigate(-1);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setSearchParams] = useSearchParams();
 
   return (
     <Flex direction="row" justifyContent="space-between" alignItems="center" w="full" mb={mb}>
       <Heading color="gray.800" fontSize="20px" textTransform="capitalize">
-        <IconButton
-          aria-label="Voltar"
-          icon={<ArrowBackIcon />}
-          variant="ghost"
-          onClick={() => navigate(-1)}
-        />
+        <IconButton aria-label="Voltar" icon={<ArrowBackIcon />} variant="ghost" onClick={goBack} />
         {title}
       </Heading>
       <Helmet>
@@ -64,7 +63,7 @@ function SubHeader({
                 <DeleteButton id={id} />
               ) : null
             ) : (
-              <Button onClick={() => navigate(-1)} variant="link" isDisabled={loading}>
+              <Button onClick={goBack} variant="link" isDisabled={loading}>
                 Cancelar
               </Button>
             )}
