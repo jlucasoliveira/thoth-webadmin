@@ -1,4 +1,5 @@
 import { Gender } from '@/features/products/types';
+import { StockKind } from '@/features/stock/types';
 
 export function generateStatusOption() {
   return [
@@ -19,5 +20,13 @@ export function generateGenderOption() {
     { label: 'Nenhum', value: Gender.None },
     { label: 'Masculino', value: Gender.Male },
     { label: 'Feminino', value: Gender.Female },
+  ];
+}
+
+export function generateStockKindOption() {
+  return [
+    { label: 'Entrada', value: StockKind.Entry },
+    { label: 'Remoção', value: StockKind.Removal },
+    { label: 'Perca', value: StockKind.Lose },
   ];
 }
