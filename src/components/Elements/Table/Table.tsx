@@ -38,10 +38,13 @@ type TableProps<T> = {
   debug?: boolean;
   pages: number;
   frontPagination?: FrontPaginationProps;
+  filtersContext?: string;
 };
 
 function Table<T>(props: TableProps<T>) {
-  const { query, changePage, handleOrder, sorting } = useFilters<T>();
+  const { query, changePage, handleOrder, sorting } = useFilters<T>({
+    context: props.filtersContext,
+  });
   const table = useReactTable({
     state: { sorting },
     data: props.data,
