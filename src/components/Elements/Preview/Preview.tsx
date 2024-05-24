@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   ButtonProps,
   IconButton,
@@ -12,10 +13,10 @@ import {
   useBoolean,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Loading } from '..';
 import { ViewIcon } from '@chakra-ui/icons';
 import { AttachmentSigned } from '@/features/attachments/types';
-import { useEffect, useState } from 'react';
+import { useGetAttachment } from '@/features/attachments/api/getAttachment';
+import { Loading } from '..';
 
 type Props = {
   title: string;
@@ -23,18 +24,24 @@ type Props = {
   file?: File;
   attachment?: AttachmentSigned;
   Button?: React.ElementType<ButtonProps>;
+  attachmentId?: string;
+  fetch?: boolean;
 };
 
 function Preview(props: Props) {
   const [base64, setBase64] = useState<string | undefined>();
   const [imageLoaded, manager] = useBoolean();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const attachment = useGetAttachment({
+    id: props.attachmentId,
+    config: { enabled: props.fetch && !!props.attachmentId },
+  });
 
   useEffect(() => {
     if (props.file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (e?.target?.result) setBase64(e.target!.result as string);
+        if (e?.target?.result && e?.total > 0) setBase64(e.target!.result as string);
       };
       reader.readAsDataURL(props.file);
     }
@@ -52,7 +59,7 @@ function Preview(props: Props) {
               <Image
                 fit="contain"
                 boxSize="400px"
-                src={base64 || props.attachment?.url}
+                src={base64 || props.attachment?.url || attachment.data?.url}
                 alt={props.title}
                 onLoad={manager.on}
               />
@@ -60,9 +67,9 @@ function Preview(props: Props) {
           </ModalBody>
         </ModalContent>
       </Modal>
-      {props.isLoading ? (
+      {props.isLoading || (attachment.isFetching && attachment.isLoading) ? (
         <Loading size="sm" />
-      ) : props.attachment?.url || props ? (
+      ) : props.attachment?.url || attachment.data?.url || props.file ? (
         props.Button ? (
           <props.Button onClick={onOpen} />
         ) : (
