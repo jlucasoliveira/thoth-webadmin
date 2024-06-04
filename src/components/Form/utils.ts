@@ -1,5 +1,6 @@
 import { Gender } from '@/features/products/types';
 import { StockKind } from '@/features/stock/types';
+import { translateStockKind } from '@/features/stock/utils/kind';
 
 export function generateStatusOption() {
   return [
@@ -24,9 +25,5 @@ export function generateGenderOption() {
 }
 
 export function generateStockKindOption() {
-  return [
-    { label: 'Entrada', value: StockKind.Entry },
-    { label: 'Remoção', value: StockKind.Removal },
-    { label: 'Perca', value: StockKind.Lose },
-  ];
+  return Object.values(StockKind).map((value) => ({ value, label: translateStockKind(value) }));
 }
