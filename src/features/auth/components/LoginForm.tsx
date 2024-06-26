@@ -39,7 +39,13 @@ function LoginForm() {
 
   return (
     <Box bg="white" rounded={8} mt={10} p="24px" w="sm">
-      <Input control={control} name="username" label="E-mail" required isDisabled={isLoading} />
+      <Input
+        control={control}
+        name="username"
+        label="Nome de usuário"
+        required
+        isDisabled={isLoading}
+      />
       <Input
         autoComplete="password"
         control={control}
