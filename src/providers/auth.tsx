@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { PropsWithChildren, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '@/components/Elements';
@@ -7,16 +8,14 @@ import { storage } from '@/utils/storage';
 
 function AuthProvider({ children }: PropsWithChildren<object>) {
   const navigate = useNavigate();
-  const { data, isError, status, refetch } = useProfile();
-  const { token, setUpUserData, removeToken, removeUserData } = useUserStore();
-
-  useEffect(() => {
-    if (data?.data) setUpUserData(data.data);
-  }, [data, setUpUserData]);
-
-  useEffect(() => {
-    if (isError) storage.clearToken();
-  }, [isError]);
+  const { token, setToken, setIsLoggedIn, setUpUserData, removeToken, removeUserData } =
+    useUserStore();
+  const { data, status } = useProfile({
+    config: {
+      enabled: token !== undefined,
+      retry: false,
+    },
+  });
 
   useEffect(() => {
     const storageToken = storage.getToken();
@@ -24,10 +23,18 @@ function AuthProvider({ children }: PropsWithChildren<object>) {
       removeToken();
       removeUserData();
       navigate('/', { replace: true });
+    } else {
+      setToken(storageToken);
+      setIsLoggedIn(true);
     }
-    if (token) refetch({ cancelRefetch: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, []);
+
+  useEffect(() => {
+    if (status === 'success' && data !== undefined) {
+      setUpUserData(data.data);
+      setIsLoggedIn(true);
+    }
+  }, [status, data]);
 
   if (status === 'success') {
     return children;
