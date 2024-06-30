@@ -30,4 +30,6 @@ jobs:
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: '/dist/, /node_modules/'
           SCRIPT_AFTER_REQUIRED: true
-          SCRIPT_AFTER: sudo systemctl restart nginx
+          SCRIPT_AFTER: |
+            sudo mv ${{ secrets.REMOTE_TARGET }}/* /var/www/html/
+            sudo systemctl restart nginx
