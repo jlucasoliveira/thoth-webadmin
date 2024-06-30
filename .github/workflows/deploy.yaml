@@ -29,6 +29,8 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: '/dist/, /node_modules/'
+          SCRIPT_BEFORE_REQUIRED: true
+          SCRIPT_BEFORE: sudo rm -rf /var/www/html/*
           SCRIPT_AFTER_REQUIRED: true
           SCRIPT_AFTER: |
             sudo mv ${{ secrets.REMOTE_TARGET }}/* /var/www/html/
