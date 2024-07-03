@@ -139,7 +139,6 @@ function Table<T>(props: TableProps<T>) {
                     key={cell.id}
                     color="gray.560"
                     fontSize="0.75rem"
-                    textTransform="uppercase"
                     css={{ a: { textTransform: 'none' } }}
                   >
                     {flexRender(renderCell, cell.getContext())}
