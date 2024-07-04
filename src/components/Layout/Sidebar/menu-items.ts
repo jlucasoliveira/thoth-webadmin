@@ -1,10 +1,10 @@
 import { FC } from 'react';
-// import { ReactComponent as ClientIcon } from '@/assets/icons/sidebar/cliente.svg';
+import { ReactComponent as ClientIcon } from '@/assets/icons/sidebar/cliente.svg';
 import { ReactComponent as PermissionIcon } from '@/assets/icons/sidebar/permissoes.svg';
 import { ReactComponent as FornecedoresIcon } from '@/assets/icons/sidebar/fornecedor.svg';
 import { ReactComponent as LubrificanteIcon } from '@/assets/icons/sidebar/lubrificante.svg';
 import { ReactComponent as EstoqueIcon } from '@/assets/icons/sidebar/estoque.svg';
-// import { UserRoutes } from '@/features/users/routes/constants';
+import { UserRoutes } from '@/features/users/routes/constants';
 import { StockRoutes } from '@/features/stock/routes/constants';
 import { ProductRoutes } from '@/features/products/routes/constants';
 import { BrandsRoutes } from '@/features/brands/routes/constants';
@@ -33,12 +33,12 @@ export const options: Menu = {
       to: '/user-permissions',
       icon: PermissionIcon,
     },
-    // {
-    //   id: 'users',
-    //   label: 'Usuários',
-    //   icon: ClientIcon,
-    //   to: UserRoutes.Users,
-    // },
+    {
+      id: 'users',
+      label: 'Usuários',
+      icon: ClientIcon,
+      to: UserRoutes.Users,
+    },
     {
       id: 'brands',
       label: 'Marcas',
