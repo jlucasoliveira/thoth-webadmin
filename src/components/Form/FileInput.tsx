@@ -3,9 +3,10 @@ import { FieldValues, Path, PathValue, useController, useWatch } from 'react-hoo
 import { Flex, FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { ReactComponent as UploadIcon } from '@/assets/icons/navigation/upload.svg';
 import { useGetAttachment } from '@/features/attachments/api/getAttachment';
+import { basename } from '@/features/attachments/utils';
+import { Size } from '@/features/attachments/types';
 import { Preview } from '../Elements';
 import { FieldWrapperProps } from '.';
-import { basename } from '@/features/attachments/utils';
 
 type Props<T extends FieldValues = FieldValues> = {
   nameURLField: Path<T>;
@@ -21,7 +22,7 @@ function FileInput<T extends FieldValues>({
 }: Props<T>) {
   const object = useWatch({ control: props.control, name: nameURLField });
   const { field, fieldState } = useController({ control: props.control, name: props.name });
-  const attachment = useGetAttachment({ id: object?.id });
+  const attachment = useGetAttachment({ id: object?.id, size: Size.L });
 
   const handleChange = useCallback(
     async (file: File) => {
