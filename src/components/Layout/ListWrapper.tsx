@@ -99,7 +99,7 @@ function ListWrapper<T>({
         <Heading color="gray.800" fontSize="1.25rem">
           {memoTitle}
         </Heading>
-        <Flex direction="row" alignItems="center">
+        <Flex direction="row" alignItems="center" gap={1}>
           <Search
             control={control}
             name="search"

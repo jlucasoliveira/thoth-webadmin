@@ -38,14 +38,14 @@ function FieldWrapper<T extends FieldValues = FieldValues>(props: _FieldWrapperP
           isInvalid={fieldProps.fieldState.invalid}
           isRequired={props.required || props.isRequired}
         >
-          <FormLabel fontSize={14} whiteSpace="nowrap" style={props.labelStyles}>
+          <FormLabel fontSize={13} whiteSpace="nowrap" style={props.labelStyles}>
             {props.label}
           </FormLabel>
           {props.children(fieldProps)}
           {!fieldProps.fieldState.invalid ? (
-            <div style={{ minHeight: 'calc(19px + 0.5rem)' }} />
+            <div style={{ minHeight: 'calc(17px + 0.5rem)' }} />
           ) : null}
-          <FormErrorMessage>
+          <FormErrorMessage fontSize={13}>
             {props.childErrorAttrName
               ? (fieldProps.fieldState.error as Record<string, any>)?.[props.childErrorAttrName]
                   ?.message
