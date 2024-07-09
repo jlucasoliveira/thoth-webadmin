@@ -4,7 +4,7 @@ import { StockModel } from '@/features/stock/types';
 export * from './gender';
 
 export type ProductVariationModel = BaseEntity & {
-  variation: string;
+  variation?: string;
   externalCode: string;
   barcode?: string | null;
   price: number;
@@ -16,8 +16,8 @@ export type ProductVariationModel = BaseEntity & {
 
 export type ProductModel = BaseEntity & {
   name: string;
-  weight: number;
-  volume: number;
+  weight?: number;
+  volume?: number;
   brandId: string;
   categoryId: string;
   gender?: Gender;

@@ -6,7 +6,7 @@ import { useNotificationStore } from '@/stores/notifications';
 import { BaseEntity } from '@/types/common';
 import { ProductVariationModel } from '../../types';
 
-export type Payload = Omit<ProductVariationModel, keyof BaseEntity | 'product'>;
+export type Payload = Omit<ProductVariationModel, keyof BaseEntity | 'product' | 'stock'>;
 
 async function createVariation(params: Payload) {
   const { productId, ...payload } = params;
