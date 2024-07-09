@@ -30,8 +30,8 @@ const optionValueDefault = {
 const schema = object().shape({
   id: string().optional(),
   name: string().required('Campo obrigatório'),
-  weight: number().positive('Informe um valor válido').required('Campo obrigatório'),
-  volume: number().positive('Informe um valor válido').required('Campo obrigatório'),
+  weight: number().positive('Informe um valor válido').typeError('Informe um número').optional(),
+  volume: number().positive('Informe um valor válido').typeError('Informe um número').optional(),
   brand: object().shape(optionValue).required('Campo obrigatório'),
   category: object().shape(optionValue).required('Campo obrigatório'),
   gender: mixed<Gender>().oneOf(Object.values(Gender)),
@@ -147,7 +147,6 @@ function ProductManageForm({
             control={control}
             name="weight"
             label="Peso"
-            required
           />
           <Input
             type="number"
@@ -155,7 +154,6 @@ function ProductManageForm({
             control={control}
             name="volume"
             label="Volume"
-            required
           />
         </FieldsContainer>
         <Variations
