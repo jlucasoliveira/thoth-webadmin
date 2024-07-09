@@ -17,4 +17,5 @@ export type StockEntryModel = BaseEntity & {
 export type StockModel = BaseEntity & {
   quantity: number;
   productId: string;
+  minQuantity: number;
 };
