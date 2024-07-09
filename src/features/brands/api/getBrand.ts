@@ -3,7 +3,7 @@ import { ExtractFnReturnType, QueryConfig } from '@/lib/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { BrandModel } from '../types';
 
-async function getBrand(id: string) {
+async function getBrand(id: number) {
   const { data } = await axios.get<BrandModel>(`/brands/${id}`);
   return data;
 }
@@ -12,7 +12,7 @@ type QueryFnType = typeof getBrand;
 
 type UseGetBrand = {
   config?: QueryConfig<QueryFnType>;
-  id?: string;
+  id?: number;
 };
 
 function useGetBrand({ config, id }: UseGetBrand) {

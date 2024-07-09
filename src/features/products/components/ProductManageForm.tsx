@@ -19,12 +19,12 @@ import { Variations } from './Variations/Variations';
 
 const optionValue = {
   label: string().required(),
-  value: string().required(),
+  value: number().required(),
 };
 
 const optionValueDefault = {
   label: '',
-  value: '',
+  value: 0,
 };
 
 const schema = object().shape({

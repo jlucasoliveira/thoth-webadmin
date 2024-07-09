@@ -18,7 +18,7 @@ export type ProductModel = BaseEntity & {
   name: string;
   weight?: number;
   volume?: number;
-  brandId: string;
-  categoryId: string;
+  brandId: number;
+  categoryId?: number;
   gender?: Gender;
 };

@@ -12,7 +12,7 @@ function BrandManage() {
   const { id } = useParams<Params>();
   const { isEdit } = useFilters();
   const navigate = useNavigate();
-  const supplier = useGetBrand({ id });
+  const supplier = useGetBrand({ id: id ? Number(id) : undefined });
   const creation = useCreateBrand();
   const update = useBrandPartialUpdate();
 

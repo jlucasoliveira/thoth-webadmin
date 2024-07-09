@@ -23,3 +23,7 @@ export type BaseEntity = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type BaseEntityInt = BaseEntity & {
+  id: string;
+};
