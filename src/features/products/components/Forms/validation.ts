@@ -26,10 +26,13 @@ export const imagesSchema = object({
 export type ImageFormType = InferType<typeof imagesSchema>;
 
 export const variationSchema = object().shape({
-  variation: string().required('Campo obrigatório'),
+  variation: string().optional(),
   externalCode: string().required('Campo obrigatório'),
   barcode: string().optional(),
-  price: number().required('Campo obrigatório'),
+  price: number()
+    .required('Campo obrigatório')
+    .typeError('Informe um valor válido')
+    .positive('Informe um número positivo'),
   icon: mixed<File>(),
   iconObject: mixed<AttachmentEntity>().optional().nullable(),
   images: array(imagesSchema),
