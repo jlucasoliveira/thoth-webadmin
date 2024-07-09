@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { ViewIcon } from '@chakra-ui/icons';
-import { AttachmentSigned } from '@/features/attachments/types';
+import { AttachmentSigned, Size } from '@/features/attachments/types';
 import { useGetAttachment } from '@/features/attachments/api/getAttachment';
 import { Loading } from '..';
 
@@ -35,6 +35,7 @@ function Preview(props: Props) {
   const attachment = useGetAttachment({
     id: props.attachmentId,
     config: { enabled: props.fetch && !!props.attachmentId },
+    size: Size.L,
   });
 
   useEffect(() => {

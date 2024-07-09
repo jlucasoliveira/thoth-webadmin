@@ -92,7 +92,7 @@ function VariationModal(props: VariationModalProps) {
     <>
       <Modal isCentered isOpen={props.isOpen} onClose={props.onClose}>
         <ModalOverlay />
-        <ModalContent maxW="80%" rounded={8}>
+        <ModalContent maxH="80%" maxW="80%" rounded={8}>
           <ModalHeader display="flex" justifyContent="space-between">
             Dados da variante
             <Flex>
@@ -116,7 +116,6 @@ function VariationModal(props: VariationModalProps) {
                 control={control}
                 name="variation"
                 label="Nome"
-                required
               />
               <Input
                 isDisabled={props.isLoading || !props.isEdit}

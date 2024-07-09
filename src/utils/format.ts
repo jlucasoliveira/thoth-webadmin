@@ -39,3 +39,12 @@ export function capitalize(text: string): string {
   const first = text.charAt(0);
   return text.replace(first, first.toUpperCase());
 }
+
+export function currencyFormat(value?: number | null) {
+  if (!value && value !== 0) return '-';
+
+  return new Intl.NumberFormat('pt-br', {
+    currency: 'BRL',
+    style: 'currency',
+  }).format(value);
+}
