@@ -8,13 +8,14 @@ import { Loading, Table } from '@/components/Elements';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { useSendFileToBucket } from '@/features/attachments/api/sendFileToBucket';
 import { useDeleteAttachment } from '@/features/attachments/api/deleteAttachment';
+import { currencyFormat } from '@/utils/format';
 import { useVariationPartialUpdate } from '../../api/variations/partialUpdateVariation';
 import { useCreateVariation } from '../../api/variations/createVariation';
 import { useProductVariations } from '../../api/variations/getProductsVariation';
 import { ProductVariationModel } from '../../types';
 import { VARIATION_ID } from '../../utils/params';
-import { VariationModal, FormPayload } from './VariationModal';
 import { DeleteVariation } from '../Delete/DeleteVariation';
+import { VariationModal, FormPayload } from './VariationModal';
 import { performCreation } from './utils';
 
 type VariationsProps = Pick<UseDisclosureReturn, 'onOpen' | 'isOpen' | 'onClose'> & {
@@ -35,9 +36,12 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
 
   const columns = useMemo<ColumnDef<ProductVariationModel>[]>(
     () => [
-      { header: 'Nome', accessorKey: 'variation' },
+      { header: 'Nome', accessorFn: (row) => row.variation ?? '-' },
       { header: 'Código de referência', accessorKey: 'externalCode' },
-      { header: 'Valor', accessorKey: 'price' },
+      {
+        header: 'Valor',
+        accessorFn: (row) => currencyFormat(row.price),
+      },
       {
         header: 'Ações',
         accessorKey: 'id',
@@ -57,13 +61,13 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
                   onOpen();
                 }}
               />
-              <DeleteVariation id={id} productId={productId} remove={remove} />
+              <DeleteVariation id={id} productId={productId} isDisabled={!isEdit} remove={remove} />
             </Flex>
           );
         },
       },
     ],
-    [productId, remove, addParam, onOpen]
+    [productId, isEdit, remove, addParam, onOpen]
   );
 
   const handleOnClose = useCallback(() => {
@@ -73,7 +77,7 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
 
   async function onSubmit({ form, variation }: FormPayload) {
     if (productId) {
-      performCreation(
+      await performCreation(
         createVariation.mutateAsync,
         updateVariation.mutateAsync,
         sendToBucket.mutateAsync,
@@ -110,6 +114,12 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
           onClose={handleOnClose}
           onSubmit={onSubmit}
           productId={productId}
+          isLoading={
+            createVariation.isLoading ||
+            updateVariation.isLoading ||
+            sendToBucket.isLoading ||
+            deleteAttachment.isLoading
+          }
         />
       </FieldsContainer>
       <Table columns={columns} data={data?.data ?? []} pages={data?.meta?.totalPages ?? 1} />
