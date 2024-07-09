@@ -7,10 +7,11 @@ import { useDeleteVariation } from '../../api/variations/deleteVariation';
 type DeleteVariation = {
   id: string | number;
   productId?: string;
+  isDisabled?: boolean;
   remove: (index: number) => void;
 };
 
-function DeleteVariation({ id, productId, remove }: DeleteVariation) {
+function DeleteVariation({ id, isDisabled, productId, remove }: DeleteVariation) {
   const confirmationDialogRef = useRef<ImperativeHandle>(null);
   const { isLoading, mutateAsync } = useDeleteVariation();
 
@@ -26,6 +27,7 @@ function DeleteVariation({ id, productId, remove }: DeleteVariation) {
   return (
     <>
       <IconButton
+        isDisabled={isDisabled}
         aria-label="Excluir"
         size="xs"
         icon={<DeleteIcon />}
