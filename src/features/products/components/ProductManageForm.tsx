@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Flex, useDisclosure } from '@chakra-ui/react';
 import { Path, Resolver, useForm } from 'react-hook-form';
-import { InferType, array, mixed, number, object, string } from 'yup';
 import { FormProps } from '@/types/props';
 import { SubHeader } from '@/components/Layout';
 import { generateGenderOption } from '@/components/Form/utils';
@@ -13,30 +12,14 @@ import { useBrands } from '@/features/brands/api/getBrands';
 import { useCategories } from '@/features/categories/api/getCategories';
 import { ProductRoutes } from '../routes/constants';
 import { Gender, ProductModel } from '../types';
-import { variationSchema } from './Forms/validation';
+import { FormType, schema } from './Forms/validation';
 import { DeleteProduct } from './Delete/DeleteProduct';
 import { Variations } from './Variations/Variations';
-
-const optionValue = {
-  label: string().required(),
-  value: number().required(),
-};
 
 const optionValueDefault = {
   label: '',
   value: 0,
 };
-
-const schema = object().shape({
-  id: string().optional(),
-  name: string().required('Campo obrigatório'),
-  weight: number().positive('Informe um valor válido').typeError('Informe um número').optional(),
-  volume: number().positive('Informe um valor válido').typeError('Informe um número').optional(),
-  brand: object().shape(optionValue).required('Campo obrigatório'),
-  category: object().shape(optionValue).required('Campo obrigatório'),
-  gender: mixed<Gender>().oneOf(Object.values(Gender)),
-  variations: array(variationSchema),
-});
 
 const defaultValues: FormType = {
   name: '',
@@ -46,8 +29,6 @@ const defaultValues: FormType = {
   category: optionValueDefault,
   gender: Gender.None,
 };
-
-export type FormType = InferType<typeof schema>;
 
 function ProductManageForm({
   onSubmit,

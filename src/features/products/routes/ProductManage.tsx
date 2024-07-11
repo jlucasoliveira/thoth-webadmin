@@ -1,15 +1,15 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Params } from '@/types/props';
 import { useFilters } from '@/hooks/useFilters';
 import { extractChangedValues } from '@/utils/helpers';
 import { useSendFileToBucket } from '@/features/attachments/api/sendFileToBucket';
 import { useDeleteAttachment } from '@/features/attachments/api/deleteAttachment';
-import { ProductManageForm, FormType } from '../components/ProductManageForm';
+import { FormType } from '../components/Forms/validation';
+import { ProductManageForm } from '../components/ProductManageForm';
 import { useProductPartialUpdate } from '../api/partialUpdateProduct';
 import { useCreateProduct } from '../api/createProduct';
 import { parseFormTypeToPayload } from '../utils/parser';
 import { useGetProduct } from '../api/getProduct';
-import { ProductRoutes } from './constants';
 import { useCreateVariation } from '../api/variations/createVariation';
 import { useVariationPartialUpdate } from '../api/variations/partialUpdateVariation';
 import { performCreation } from '../components/Variations/utils';
@@ -17,8 +17,7 @@ import { performCreation } from '../components/Variations/utils';
 function ProductManage() {
   const { id } = useParams<Params>();
   const { isEdit } = useFilters();
-  const navigate = useNavigate();
-  const currentProduct = useGetProduct({ id });
+  const currentProduct = useGetProduct({ id: id ? Number(id) : undefined });
   const creation = useCreateProduct();
   const edit = useProductPartialUpdate();
   const sendToBucket = useSendFileToBucket();
@@ -46,7 +45,6 @@ function ProductManage() {
         )
       );
     }
-    navigate(ProductRoutes.List, { replace: true });
   }
 
   return (
