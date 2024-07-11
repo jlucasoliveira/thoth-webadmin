@@ -80,6 +80,7 @@ function SearchableSelect<
         ...fetcherFilters,
       } as Filter<F>,
       pageNumber: 1,
+      skip: 0,
       args: fetcherExtraParams,
     },
     config: { enabled: forceFetch || refetch === undefined },
