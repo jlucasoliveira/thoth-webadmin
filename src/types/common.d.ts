@@ -25,5 +25,5 @@ export type BaseEntity = {
 };
 
 export type BaseEntityInt = BaseEntity & {
-  id: string;
+  id: number;
 };

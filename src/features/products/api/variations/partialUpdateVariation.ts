@@ -7,7 +7,7 @@ import { ProductVariationModel } from '../../types';
 
 export type PartialUpdate = {
   id: string;
-  productId: string;
+  productId: number;
   payload: Partial<Omit<Payload, 'productId'>>;
 };
 

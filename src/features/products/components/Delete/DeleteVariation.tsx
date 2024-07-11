@@ -5,8 +5,8 @@ import { ConfirmationDialog, ImperativeHandle } from '@/components/Elements';
 import { useDeleteVariation } from '../../api/variations/deleteVariation';
 
 type DeleteVariation = {
-  id: string | number;
-  productId?: string;
+  id?: string | number;
+  productId?: number;
   isDisabled?: boolean;
   remove: (index: number) => void;
 };
@@ -18,7 +18,7 @@ function DeleteVariation({ id, isDisabled, productId, remove }: DeleteVariation)
   const confirmationHandler = useCallback(
     async (id: DeleteVariation['id']) => {
       if (typeof id === 'string') await mutateAsync({ id, productId: productId! });
-      else remove(id);
+      else if (id !== undefined) remove(id);
       confirmationDialogRef.current?.handleOnClose?.();
     },
     [productId, mutateAsync, remove]

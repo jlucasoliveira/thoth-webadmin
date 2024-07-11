@@ -4,7 +4,7 @@ import { ExtractFnReturnType, QueryConfig } from '@/lib/react-query';
 import { Paginate, Pagination } from '@/types/pagination';
 import { ProductVariationModel } from '../../types';
 
-async function getProductVariation(productId: string, params: Pagination<ProductVariationModel>) {
+async function getProductVariation(productId: number, params: Pagination<ProductVariationModel>) {
   const { data } = await axios.get<Paginate<ProductVariationModel>>(
     `/products/${productId}/variations`,
     { params }
@@ -17,7 +17,7 @@ type QueryFcType = typeof getProductVariation;
 type UseProductVariations = {
   config?: QueryConfig<QueryFcType>;
   params: Pagination<ProductVariationModel>;
-  productId?: string;
+  productId?: number;
 };
 
 function useProductVariations({ config, params, productId }: UseProductVariations) {
@@ -25,7 +25,7 @@ function useProductVariations({ config, params, productId }: UseProductVariation
     ...config,
     queryKey: ['fetch-variations', productId, params],
     queryFn: () => getProductVariation(productId!, params),
-    enabled: !!productId,
+    enabled: productId !== undefined,
   });
 }
 
