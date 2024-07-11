@@ -1,4 +1,5 @@
 import { BaseEntity } from '@/types/common';
+import { UserModel } from '@/features/auth/types';
 
 export enum StockKind {
   Entry = 'ENTRY',
@@ -12,6 +13,8 @@ export type StockEntryModel = BaseEntity & {
   expirationDate: string;
   amount: number;
   kind: StockKind;
+  userId?: string;
+  readonly user: UserModel;
 };
 
 export type StockModel = BaseEntity & {
