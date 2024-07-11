@@ -3,7 +3,7 @@ import { axios } from '@/lib/axios';
 import { ExtractFnReturnType, QueryConfig } from '@/lib/react-query';
 import { ProductModel } from '../types';
 
-async function getProduct(id: string) {
+async function getProduct(id: number) {
   const { data } = await axios.get<ProductModel>(`/products/${id}`);
   return data;
 }
@@ -12,7 +12,7 @@ type QueryFnType = typeof getProduct;
 
 type UseGetProduct = {
   config?: QueryConfig<QueryFnType>;
-  id?: string;
+  id?: number;
 };
 
 function useGetProduct({ config, id }: UseGetProduct) {
@@ -20,7 +20,7 @@ function useGetProduct({ config, id }: UseGetProduct) {
     ...config,
     queryKey: ['fetch-product', id],
     queryFn: () => getProduct(id!),
-    enabled: !!id,
+    enabled: id !== undefined,
   });
 }
 

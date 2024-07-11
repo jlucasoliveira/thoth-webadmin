@@ -26,6 +26,7 @@ const defaultValues: VariationForm = {
   externalCode: '',
   variation: '',
   price: 0,
+  quantity: 0,
 };
 
 export type FormPayload = {
@@ -34,7 +35,7 @@ export type FormPayload = {
 };
 
 type Props = {
-  productId: string;
+  productId: number;
   isLoading: boolean;
 };
 
@@ -130,6 +131,7 @@ function VariationModal(props: VariationModalProps) {
                 name="price"
                 label="Preço"
                 type="number"
+                step={0.1}
                 required
               />
               <FileInput
@@ -140,6 +142,26 @@ function VariationModal(props: VariationModalProps) {
                 name="icon"
                 nameURLField="iconObject"
               />
+              {variationId ? null : (
+                <Input
+                  isDisabled={props.isLoading || !props.isEdit}
+                  control={control}
+                  name="quantity"
+                  label="Quantidade em estoque"
+                  type="number"
+                  required
+                />
+              )}
+              {variationId ? null : (
+                <Input
+                  isDisabled={props.isLoading || !props.isEdit}
+                  control={control}
+                  name="costPrice"
+                  label="Custo de venda"
+                  type="number"
+                  required
+                />
+              )}
             </FieldsContainer>
             <FieldsContainer templateColumn={1}>
               <Textarea

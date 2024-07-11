@@ -20,7 +20,7 @@ const schema = object().shape({
   unit: string(),
   value: number(),
   inStock: number(),
-  minQuantity: number().typeError('Informe um valor válido').positive('Informe um número positivo'),
+  minQuantity: number().typeError('Informe um valor válido').min(0, 'Informe um número positivo'),
 });
 
 export type FormType = InferType<typeof schema>;
@@ -87,12 +87,13 @@ function StockManageForm({
             name="value"
             label="Valor"
             type="number"
+            step={0.1}
           />
           <Input
             isDisabled={!isFormEdit}
             control={control}
             name="minQuantity"
-            label="Quantidade mínimo"
+            label="Quantidade mínima"
             type="number"
           />
           <Input isDisabled control={control} name="inStock" label="Quantidade em estoque" />

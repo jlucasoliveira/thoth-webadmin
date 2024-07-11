@@ -1,15 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { axios } from '@/lib/axios';
 import { MutationConfig, queryClient } from '@/lib/react-query';
 import { useNotificationStore } from '@/stores/notifications';
 import { BaseEntity } from '@/types/common';
+import { ProductRoutes } from '../routes/constants';
 import { ProductModel } from '../types';
 
-export type Payload = Omit<
-  ProductModel,
-  keyof BaseEntity | 'supplier' | 'clientId' | 'productType' | 'material'
->;
+export type Payload = Omit<ProductModel, keyof BaseEntity>;
 
 async function createProduct(payload: Payload) {
   const { data } = await axios.post<ProductModel>(`/products`, payload);
@@ -28,14 +26,14 @@ function useCreateProduct({ config }: UseCreateProduct = {}) {
     ...config,
     mutationKey: ['create-product'],
     mutationFn: (payload) => createProduct(payload),
-    onSuccess: () => {
+    onSuccess: ({ id }) => {
       queryClient.invalidateQueries(['fetch-products']);
       addNotification({
         type: 'success',
         title: 'Sucesso!',
         message: 'Produto criado.',
       });
-      navigate(-1);
+      navigate(generatePath(ProductRoutes.Edit, { id }));
     },
   });
 }

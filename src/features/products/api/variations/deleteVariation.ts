@@ -4,7 +4,7 @@ import { MutationConfig, queryClient } from '@/lib/react-query';
 import { useNotificationStore } from '@/stores/notifications';
 
 type Params = {
-  productId: string;
+  productId: number;
   id: string;
 };
 

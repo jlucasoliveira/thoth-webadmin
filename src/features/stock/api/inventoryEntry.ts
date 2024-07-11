@@ -7,7 +7,7 @@ import { BaseEntity } from '@/types/common';
 
 export type Params = {
   variationId: string;
-  payload: Omit<StockEntryModel, keyof BaseEntity> & { newPrice?: number };
+  payload: Omit<StockEntryModel, keyof BaseEntity | 'user'> & { newPrice?: number };
 };
 
 async function inventoryEntry({ variationId, payload }: Params) {

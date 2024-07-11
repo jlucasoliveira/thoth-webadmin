@@ -46,7 +46,7 @@ function UsersList() {
   }
 
   return (
-    <Table columns={columns} data={users.data.data || []} pages={users.data.meta.totalPages || 0} />
+    <Table columns={columns} data={users.data.data || []} pages={users.data.meta.pages || 0} />
   );
 }
 

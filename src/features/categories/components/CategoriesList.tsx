@@ -46,11 +46,7 @@ function CategoriesList() {
   }
 
   return (
-    <Table
-      columns={columns}
-      data={brands.data.data || []}
-      pages={brands.data?.meta?.totalPages || 0}
-    />
+    <Table columns={columns} data={brands.data.data || []} pages={brands.data?.meta?.pages || 0} />
   );
 }
 

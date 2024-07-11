@@ -1,5 +1,4 @@
-import { FormType } from '../components/ProductManageForm';
-import { VariationForm } from '../components/Forms/validation';
+import { FormType, VariationForm } from '../components/Forms/validation';
 import { Payload } from '../api/createProduct';
 import { Payload as ProductVariationPayload } from '../api/variations/createVariation';
 
@@ -16,7 +15,7 @@ export function parseFormTypeToPayload(data: FormType): Payload {
 
 export function parseFormTypeToVariationPayload(
   data: VariationForm,
-  productId?: string
+  productId?: number
 ): ProductVariationPayload {
   return {
     externalCode: data.externalCode,
@@ -25,5 +24,7 @@ export function parseFormTypeToVariationPayload(
     barcode: data.barcode,
     variation: data.variation,
     productId: data.productId! || productId!,
+    quantity: data.quantity,
+    costPrice: data.costPrice,
   };
 }

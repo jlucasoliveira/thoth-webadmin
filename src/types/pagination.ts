@@ -25,7 +25,8 @@ type Include<T> = {
 };
 
 export type Pagination<T = object> = {
-  pageSize?: number;
+  limit?: number;
+  skip: number;
   pageNumber: number;
   filter?: Filter<T>;
   sort?: Sort<T>;
@@ -33,8 +34,13 @@ export type Pagination<T = object> = {
 };
 
 type Meta = {
-  totalPages: number;
-  totalCount: number;
+  page: number;
+  limit: number;
+  itens: number;
+  total: number;
+  pages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 };
 
 export type Paginate<T = any> = {
@@ -45,7 +51,12 @@ export type Paginate<T = any> = {
 export const defaultPaginate: Paginate<any> = {
   data: [],
   meta: {
-    totalCount: 0,
-    totalPages: 1,
+    page: 1,
+    limit: 10,
+    itens: 0,
+    total: 0,
+    pages: 1,
+    hasPreviousPage: false,
+    hasNextPage: false,
   },
 };
