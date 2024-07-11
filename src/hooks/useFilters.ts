@@ -42,7 +42,7 @@ type Filters<T> = {
 };
 
 function useFilters<T>(
-  { pageSize, context }: Props = { pageSize: PAGE_SIZE, context: '' }
+  { pageSize = PAGE_SIZE, context = '' }: Props = { pageSize: PAGE_SIZE, context: '' }
 ): Filters<T> {
   const [params, setParams] = useSearchParams();
 
@@ -99,9 +99,12 @@ function useFilters<T>(
       key.startsWith(createFilterKey())
     );
 
+    const pageNumber = Number(page) || 1;
+
     const pagination: Pagination<T> = {
-      pageSize,
-      pageNumber: Number(page) || 1,
+      pageNumber,
+      limit: pageSize,
+      skip: (pageNumber - 1) * pageSize,
       sort: orders as Sort<T>,
       filter: parseFilters(filters),
     };

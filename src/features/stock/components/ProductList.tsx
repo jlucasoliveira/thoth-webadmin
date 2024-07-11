@@ -62,7 +62,7 @@ function ProductList() {
     <Table
       columns={columns}
       data={variations.data.data || []}
-      pages={variations.data.meta.totalPages || 0}
+      pages={variations.data.meta.pages || 0}
     />
   );
 }

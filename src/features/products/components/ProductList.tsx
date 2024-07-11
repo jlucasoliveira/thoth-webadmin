@@ -47,7 +47,7 @@ function ProductList() {
     <Table
       columns={columns}
       data={products.data.data || []}
-      pages={products.data.meta.totalPages || 0}
+      pages={products.data.meta.pages || 0}
     />
   );
 }
