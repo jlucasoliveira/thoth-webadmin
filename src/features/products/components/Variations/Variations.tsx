@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { ViewIcon } from '@chakra-ui/icons';
 import { ColumnDef } from '@tanstack/react-table';
 import { Control, useFieldArray } from 'react-hook-form';
@@ -12,14 +12,14 @@ import { currencyFormat } from '@/utils/format';
 import { useVariationPartialUpdate } from '../../api/variations/partialUpdateVariation';
 import { useCreateVariation } from '../../api/variations/createVariation';
 import { useProductVariations } from '../../api/variations/getProductsVariation';
-import { ProductVariationModel } from '../../types';
 import { VARIATION_ID } from '../../utils/params';
+import { FormType, parseVariationToForm } from '../Forms/validation';
 import { DeleteVariation } from '../Delete/DeleteVariation';
 import { VariationModal, FormPayload } from './VariationModal';
 import { performCreation } from './utils';
 
 type VariationsProps = Pick<UseDisclosureReturn, 'onOpen' | 'isOpen' | 'onClose'> & {
-  productId?: string;
+  productId?: number;
   isEdit?: boolean;
   control: Control<any, any>;
 };
@@ -31,10 +31,13 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
   const deleteAttachment = useDeleteAttachment();
   const { query, addParam, getParam, removeParam } = useFilters({ context: 'variations' });
   const { data, isFetching, isLoading } = useProductVariations({ productId, params: query });
-  const { remove, append } = useFieldArray({ control, name: 'variations' });
+  const { fields, append, replace, remove } = useFieldArray<FormType>({
+    control,
+    name: 'variations',
+  });
   const variationId = useMemo(() => getParam(VARIATION_ID) ?? undefined, [getParam]);
 
-  const columns = useMemo<ColumnDef<ProductVariationModel>[]>(
+  const columns = useMemo<ColumnDef<any>[]>(
     () => [
       { header: 'Nome', accessorFn: (row) => row.variation ?? '-' },
       { header: 'Código de referência', accessorKey: 'externalCode' },
@@ -44,24 +47,35 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
       },
       {
         header: 'Ações',
-        accessorKey: 'id',
+        accessorKey: '_id',
         enableSorting: false,
         cell: (info) => {
-          const id = info.getValue() as string;
+          const id = info.getValue() as string | number | undefined;
+          const isDisabled = id === undefined;
+          const handleClick = () => {
+            if (id) {
+              addParam(VARIATION_ID, id.toString());
+              onOpen();
+            }
+          };
+
           return (
             <Flex direction="row">
               <IconButton
+                isDisabled={isDisabled}
                 mr="2"
                 variant="ghost"
                 aria-label="Editor variação"
                 icon={<ViewIcon />}
                 size="xs"
-                onClick={() => {
-                  addParam(VARIATION_ID, id);
-                  onOpen();
-                }}
+                onClick={handleClick}
               />
-              <DeleteVariation id={id} productId={productId} isDisabled={!isEdit} remove={remove} />
+              <DeleteVariation
+                id={id}
+                productId={productId}
+                isDisabled={!isEdit || isDisabled}
+                remove={remove}
+              />
             </Flex>
           );
         },
@@ -91,7 +105,13 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
     handleOnClose();
   }
 
-  if (isFetching && isLoading) return <Loading />;
+  useEffect(() => {
+    if (data?.data !== undefined) {
+      replace(data.data.map(parseVariationToForm));
+    }
+  }, [data, replace]);
+
+  if (isLoading && isFetching) return <Loading />;
 
   return (
     <>
@@ -122,7 +142,7 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
           }
         />
       </FieldsContainer>
-      <Table columns={columns} data={data?.data ?? []} pages={data?.meta?.totalPages ?? 1} />
+      <Table columns={columns} data={fields} pages={data?.meta?.pages ?? 1} />
     </>
   );
 }
