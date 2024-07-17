@@ -1,4 +1,5 @@
 import { isValid } from 'date-fns';
+import { BaseEntity, baseEntityColumns } from '@/types/common';
 
 export async function sleep(ms = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -24,6 +25,7 @@ export function extractChangedValues<T extends Record<string, any | any[]>>(
 ): Partial<T> {
   const result: Partial<T> = {};
   Object.entries(updatedObject).forEach(([key, value]) => {
+    if (baseEntityColumns.includes(key as keyof BaseEntity)) return;
     if (Array.isArray(value) && !ignoreArrays) {
       result[key as keyof T] = value as any;
     } else if (typeof value !== 'object' && key in original && value !== original[key as keyof T]) {
