@@ -11,8 +11,10 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Path, Control, Resolver, useFieldArray, useForm, PathValue } from 'react-hook-form';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
-import { Form, Input, Textarea } from '@/components/Form';
+import { Form, Input, SearchableSelect, Select, Textarea } from '@/components/Form';
 import { FileInput } from '@/components/Form/FileInput';
+import { generateGenderOption } from '@/components/Form/utils';
+import { useCategories } from '@/features/categories/api/getCategories';
 import { useAttachments } from '@/features/attachments/api/getAttachments';
 import { useFilters } from '@/hooks/useFilters';
 import { FormProps } from '@/types/props';
@@ -46,7 +48,10 @@ function VariationModal(props: VariationModalProps) {
   const { query } = useFilters({ context: 'images' });
   const { getParam } = useFilters({ context: 'variations' });
   const variationId = useMemo(() => getParam(VARIATION_ID) ?? undefined, [getParam]);
-  const { data, isLoading, isFetching } = useGetProductVariation({ id: variationId });
+  const { data, isLoading, isFetching } = useGetProductVariation({
+    id: variationId,
+    params: { include: { categories: true } },
+  });
   const attachments = useAttachments({
     params: { ...query, filter: { ...query.filter, variationId: { eq: variationId } } },
     config: { enabled: !!variationId },
@@ -55,6 +60,7 @@ function VariationModal(props: VariationModalProps) {
     () => (attachments.isLoading && attachments.isFetching) || (isLoading && isFetching),
     [attachments.isLoading, attachments.isFetching, isLoading, isFetching]
   );
+  const genderOptions = useMemo(generateGenderOption, []);
 
   const { handleSubmit, control, setValue } = useForm<VariationForm>({
     defaultValues,
@@ -134,6 +140,42 @@ function VariationModal(props: VariationModalProps) {
                 step={0.1}
                 required
               />
+              <SearchableSelect
+                isMulti
+                required
+                isDisabled={!props.isEdit}
+                control={control}
+                name="categories"
+                label="Categoria"
+                placeholder="Pesquise uma categoria"
+                isClearable={false}
+                useFetch={useCategories}
+                defaultOption={data?.categories}
+                getOptionLabel={(option) => option.name}
+                handleSetValue={(option) => setValue('categories', option)}
+              />
+              <Select
+                required
+                isDisabled={!props.isEdit}
+                name="gender"
+                control={control}
+                label="Gênero"
+                options={genderOptions}
+              />
+              <Input
+                type="number"
+                isDisabled={!props.isEdit}
+                control={control}
+                name="weight"
+                label="Peso"
+              />
+              <Input
+                type="number"
+                isDisabled={!props.isEdit}
+                control={control}
+                name="volume"
+                label="Volume"
+              />
               <FileInput
                 required
                 isDisabled={props.isLoading || !props.isEdit}
@@ -157,7 +199,7 @@ function VariationModal(props: VariationModalProps) {
                   isDisabled={props.isLoading || !props.isEdit}
                   control={control}
                   name="costPrice"
-                  label="Custo de venda"
+                  label="Custo de compra"
                   type="number"
                   required
                 />

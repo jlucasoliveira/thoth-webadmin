@@ -10,23 +10,26 @@ import { ProductVariationModel } from '../../types';
 import { FormPayload } from './VariationModal';
 import { ImageFormType } from '../Forms/validation';
 
-type Response = Payload & BaseEntity;
+type Response = Omit<Payload, 'categories'> & BaseEntity;
 type Mutation<T, R = BaseEntity> = UseMutateAsyncFunction<R, AxiosError<unknown, any>, T>;
 
 export async function performVariationMutation(
   [create, update]: [Mutation<Payload, Response[]>, Mutation<PartialUpdate>],
-  payload: Payload,
+  { categories, ...payload }: Payload,
   variation?: ProductVariationModel
 ): Promise<string> {
   if (variation?.id) {
     await update({
       id: variation.id,
       productId: variation.productId,
-      payload: extractChangedValues(variation, payload),
+      payload: {
+        ...extractChangedValues(variation, payload),
+        categories,
+      },
     });
     return variation.id;
   } else {
-    const data = await create(payload);
+    const data = await create({ ...payload, categories });
     return data[0].id;
   }
 }

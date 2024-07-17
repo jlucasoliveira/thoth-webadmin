@@ -1,6 +1,8 @@
-import { AttachmentEntity } from '@/features/attachments/types';
-import { StockKind } from '@/features/stock/types';
 import { InferType, array, date, mixed, number, object, string } from 'yup';
+import { AttachmentEntity } from '@/features/attachments/types';
+import { CategoryModel } from '@/features/categories/types';
+import { BrandModel } from '@/features/brands/types';
+import { StockKind } from '@/features/stock/types';
 import { Gender, ProductVariationModel } from '../../types';
 
 export const batchSchema = object().shape({
@@ -37,6 +39,10 @@ export const variationSchema = object().shape({
     .positive('Informe um número positivo'),
   quantity: number().min(0, 'Informe um número válido').optional(),
   costPrice: number().min(0, 'Informe um número válido').optional(),
+  weight: number().min(0, 'Informe um valor válido').typeError('Informe um número').optional(),
+  volume: number().min(0, 'Informe um valor válido').typeError('Informe um número').optional(),
+  categories: array(mixed<CategoryModel>()),
+  gender: mixed<Gender>().oneOf(Object.values(Gender)),
   icon: mixed<File>(),
   iconObject: mixed<AttachmentEntity>().optional().nullable(),
   images: array(imagesSchema),
@@ -45,19 +51,10 @@ export const variationSchema = object().shape({
 
 export type VariationForm = InferType<typeof variationSchema>;
 
-export const optionValue = {
-  label: string().required(),
-  value: number().required(),
-};
-
 export const schema = object().shape({
   id: string().optional(),
   name: string().required('Campo obrigatório'),
-  weight: number().min(0, 'Informe um valor válido').typeError('Informe um número').optional(),
-  volume: number().min(0, 'Informe um valor válido').typeError('Informe um número').optional(),
-  brand: object().shape(optionValue).required('Campo obrigatório'),
-  category: object().shape(optionValue).required('Campo obrigatório'),
-  gender: mixed<Gender>().oneOf(Object.values(Gender)),
+  brand: mixed<BrandModel>(),
   variations: array(variationSchema),
 });
 

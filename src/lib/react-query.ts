@@ -55,5 +55,5 @@ type UseFetchOptions<T, Args = any> = {
 };
 
 export type UseFetch<T = object, Args = any> = (
-  options: UseFetchOptions<T, Args>
+  options: UseFetchOptions<T, Args> | any
 ) => UseQueryResult<Paginate<T>, unknown>;
