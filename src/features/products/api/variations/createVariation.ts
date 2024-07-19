@@ -5,9 +5,13 @@ import { useNotificationStore } from '@/stores/notifications';
 import { BaseEntity } from '@/types/common';
 import { ProductVariationModel } from '../../types';
 
-export type Payload = Omit<ProductVariationModel, keyof BaseEntity | 'product' | 'stock'> & {
+export type Payload = Omit<
+  ProductVariationModel,
+  keyof BaseEntity | 'product' | 'stock' | 'categories'
+> & {
   quantity?: number;
   costPrice?: number;
+  categories: number[];
 };
 
 async function createVariation(params: Payload) {

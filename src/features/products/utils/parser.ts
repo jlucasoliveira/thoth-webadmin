@@ -4,12 +4,8 @@ import { Payload as ProductVariationPayload } from '../api/variations/createVari
 
 export function parseFormTypeToPayload(data: FormType): Payload {
   return {
-    brandId: data.brand.value,
-    categoryId: data.category.value,
-    gender: data.gender,
+    brandId: data.brand!.id,
     name: data.name,
-    volume: data.volume,
-    weight: data.weight,
   };
 }
 
@@ -18,13 +14,9 @@ export function parseFormTypeToVariationPayload(
   productId?: number
 ): ProductVariationPayload {
   return {
-    externalCode: data.externalCode,
-    price: data.price,
+    ...data,
     iconId: data.iconObject?.id,
-    barcode: data.barcode,
-    variation: data.variation,
     productId: data.productId! || productId!,
-    quantity: data.quantity,
-    costPrice: data.costPrice,
+    categories: (data.categories ?? []).map((category) => category!.id as number),
   };
 }

@@ -5,29 +5,19 @@ import { Flex, useDisclosure } from '@chakra-ui/react';
 import { Path, Resolver, useForm } from 'react-hook-form';
 import { FormProps } from '@/types/props';
 import { SubHeader } from '@/components/Layout';
-import { generateGenderOption } from '@/components/Form/utils';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
-import { Form, Input, SearchableSelect, Select } from '@/components/Form';
+import { Form, Input, SearchableSelect } from '@/components/Form';
+import { BrandModel } from '@/features/brands/types';
 import { useBrands } from '@/features/brands/api/getBrands';
-import { useCategories } from '@/features/categories/api/getCategories';
 import { ProductRoutes } from '../routes/constants';
-import { Gender, ProductModel } from '../types';
+import { ProductModel } from '../types';
 import { FormType, schema } from './Forms/validation';
 import { DeleteProduct } from './Delete/DeleteProduct';
 import { Variations } from './Variations/Variations';
 
-const optionValueDefault = {
-  label: '',
-  value: 0,
-};
-
 const defaultValues: FormType = {
   name: '',
-  volume: 0,
-  weight: 0,
-  brand: optionValueDefault,
-  category: optionValueDefault,
-  gender: Gender.None,
+  brand: {} as BrandModel,
 };
 
 function ProductManageForm({
@@ -38,8 +28,6 @@ function ProductManageForm({
 }: FormProps<FormType, ProductModel>) {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const genderOptions = useMemo(generateGenderOption, []);
-
   const { control, handleSubmit, setValue } = useForm<FormType>({
     context: { isNewEntry: !props.id },
     defaultValues,
@@ -83,6 +71,7 @@ function ProductManageForm({
           <Input isDisabled={!isFormEdit} control={control} name="name" label="Nome" required />
           <SearchableSelect
             required
+            getOptionLabel={(option) => option.name}
             isDisabled={!isFormEdit}
             control={control}
             name="brand"
@@ -90,51 +79,8 @@ function ProductManageForm({
             placeholder="Pesquise uma marca"
             isClearable={false}
             useFetch={useBrands}
-            parseOptions={(brand) => ({
-              label: brand.name,
-              value: brand.id,
-              obj: brand,
-            })}
             defaultOptionValue={data?.brandId}
             handleSetValue={(option) => setValue('brand', option)}
-          />
-          <SearchableSelect
-            required
-            isDisabled={!isFormEdit}
-            control={control}
-            name="category"
-            label="Categoria"
-            placeholder="Pesquise uma categoria"
-            isClearable={false}
-            useFetch={useCategories}
-            parseOptions={(category) => ({
-              label: category.name,
-              value: category.id,
-            })}
-            defaultOptionValue={data?.categoryId}
-            handleSetValue={(option) => setValue('category', option)}
-          />
-          <Select
-            required
-            isDisabled={!isFormEdit}
-            name="gender"
-            control={control}
-            label="Gênero"
-            options={genderOptions}
-          />
-          <Input
-            type="number"
-            isDisabled={!isFormEdit}
-            control={control}
-            name="weight"
-            label="Peso"
-          />
-          <Input
-            type="number"
-            isDisabled={!isFormEdit}
-            control={control}
-            name="volume"
-            label="Volume"
           />
         </FieldsContainer>
         <Variations

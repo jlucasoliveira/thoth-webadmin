@@ -22,8 +22,16 @@ export type BaseEntity = {
   id: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
 };
 
 export type BaseEntityInt = BaseEntity & {
   id: number;
 };
+
+export const baseEntityColumns: Array<keyof BaseEntity> = [
+  'createdAt',
+  'deletedAt',
+  'id',
+  'updatedAt',
+] as const;

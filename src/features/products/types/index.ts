@@ -1,6 +1,7 @@
 import { BaseEntity, BaseEntityInt } from '@/types/common';
 import { Gender } from './gender';
 import { StockModel } from '@/features/stock/types';
+import { CategoryModel } from '@/features/categories/types';
 export * from './gender';
 
 export type ProductVariationModel = BaseEntity & {
@@ -10,15 +11,15 @@ export type ProductVariationModel = BaseEntity & {
   price: number;
   iconId?: string | null;
   productId: number;
+  weight?: number;
+  volume?: number;
+  gender?: Gender;
+  readonly categories: CategoryModel[];
   readonly product: ProductModel;
   readonly stock: StockModel;
 };
 
 export type ProductModel = BaseEntityInt & {
   name: string;
-  weight?: number;
-  volume?: number;
   brandId: number;
-  categoryId?: number;
-  gender?: Gender;
 };

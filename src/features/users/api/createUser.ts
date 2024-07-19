@@ -1,14 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { UserModel } from '@/features/auth/types';
 import { axios } from '@/lib/axios';
 import { MutationConfig, queryClient } from '@/lib/react-query';
 import { useNotificationStore } from '@/stores/notifications';
-import { useNavigate } from 'react-router-dom';
+import { BaseEntity } from '@/types/common';
 
-export type Payload = Omit<
-  UserModel,
-  'id' | 'lastLogin' | 'createdAt' | 'updatedAt' | 'isActive' | 'expoPushToken'
-> & { password: string };
+export type Payload = Omit<UserModel, keyof BaseEntity | 'lastLogin'> & { password: string };
 
 async function createUser(payload: Payload) {
   return axios.post<UserModel>('/users', payload);

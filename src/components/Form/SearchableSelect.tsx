@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import Select, { InputActionMeta, Props } from 'react-select';
 import { ActionMeta, CSSObjectWithLabel, GroupBase } from 'react-select';
 import {
@@ -11,30 +11,24 @@ import {
 } from 'react-hook-form';
 import { useTheme } from '@chakra-ui/react';
 import { UseFetch } from '@/lib/react-query';
+import { BaseEntity } from '@/types/common';
 import { Filter } from '@/types/pagination';
 import { Loading } from '../Elements';
 import { FieldWrapper, FieldWrapperProps } from '.';
 
 type OnChange<T extends FieldValues> = (event: ChangeEvent | FieldPathValue<T, Path<T>>) => void;
 
-export type Option<P = any, V = any> = {
-  label: string;
-  value: V;
-  obj?: P;
-};
-
 export type SearchableSelectProps<
-  F extends Record<string, any>,
+  F,
   T extends FieldValues = FieldValues,
   IsMulti extends boolean = false,
   P = any,
 > = FieldWrapperProps<T> &
-  Props<Option<F>, IsMulti, GroupBase<Option>> & {
-    parseOptions: (obj: F) => Option;
+  Props<F, IsMulti, GroupBase<F>> & {
     useFetch: UseFetch<F, P>;
-    defaultOptionValue?: any;
-    defaultOption?: F;
-    handleSetValue?: (data: Option<F>) => void;
+    defaultOptionValue?: IsMulti extends true ? Array<number> | Array<string> : number | string;
+    defaultOption?: IsMulti extends true ? F[] : F;
+    handleSetValue?: (data: IsMulti extends true ? F[] : F) => void;
     searchField?: keyof F;
     fetcherExtraParams?: P;
     fetcherFilters?: Filter<F>;
@@ -43,7 +37,7 @@ export type SearchableSelectProps<
   };
 
 function SearchableSelect<
-  F extends Record<string, any>,
+  F,
   T extends FieldValues = FieldValues,
   IsMulti extends boolean = false,
   P = any,
@@ -54,17 +48,17 @@ function SearchableSelect<
   required,
   isRequired,
   labelStyles,
-  parseOptions,
   useFetch,
   defaultOptionValue,
   defaultOption,
   handleSetValue,
   fetcherExtraParams,
-  searchField = 'name', // TODO: Add search param filter
+  searchField = 'name' as keyof F,
   childErrorAttrName,
   fetcherFilters,
   refetch,
   forceFetch = false,
+  isMulti,
   ...props
 }: SearchableSelectProps<F, T, IsMulti, P>) {
   const isMounted = useRef<boolean>(false);
@@ -94,24 +88,23 @@ function SearchableSelect<
     };
   }
 
-  const options = useMemo(() => {
-    if (!fetched.data?.data) return [];
-    return fetched.data.data.map((data) => parseOptions(data));
-  }, [fetched.data, parseOptions]);
-
   useEffect(() => {
-    if (defaultOptionValue && handleSetValue && !value?.value && isMounted.current) {
-      const selected = options.find((option) => option.value === defaultOptionValue);
-      if (selected) handleSetValue(selected);
+    if (defaultOptionValue && handleSetValue && !value?.id && isMounted.current) {
+      const selected = fetched.data?.data.find(
+        (obj) => (obj as BaseEntity).id == defaultOptionValue
+      );
+      if (selected) handleSetValue(selected as IsMulti extends true ? F[] : F);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultOptionValue, handleSetValue, options, value, isMounted.current]);
+  }, [defaultOptionValue, handleSetValue, value, isMounted.current]);
 
   useEffect(() => {
     if (defaultOption && handleSetValue) {
-      handleSetValue(parseOptions(defaultOption));
+      handleSetValue(
+        (isMulti && !Array.isArray(defaultOption) ? [defaultOption] : defaultOption) as any
+      );
     }
-  }, [defaultOption, handleSetValue, parseOptions]);
+  }, [defaultOption, handleSetValue, isMulti]);
 
   useEffect(() => {
     if (refetch) {
@@ -128,7 +121,7 @@ function SearchableSelect<
   }, []);
 
   const handleChange = useCallback(
-    (onChange: OnChange<T>, value: any, action: ActionMeta<Option<F>>) => {
+    (onChange: OnChange<T>, value: any, action: ActionMeta<F>) => {
       // TODO: Handle other actions
       if (action.action === 'select-option') {
         onChange(value);
@@ -166,12 +159,12 @@ function SearchableSelect<
           isClearable
           {...props}
           {...field}
+          isMulti={isMulti}
           loadingMessage={() => <Loading size="sm" />}
           noOptionsMessage={() => 'Nenhuma opção disponível'}
-          getOptionLabel={(option) => option.label}
-          getOptionValue={(option) => option.value}
+          getOptionValue={(option) => (option as BaseEntity).id?.toString()}
           placeholder={props.placeholder ? props.placeholder : 'Selecione'}
-          options={options}
+          options={fetched.data?.data ?? []}
           onChange={(...args) => handleChange(field.onChange, ...args)}
           required={required}
           isLoading={fetched.isFetching && fetched.isLoading}
