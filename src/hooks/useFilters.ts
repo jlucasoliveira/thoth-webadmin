@@ -124,10 +124,8 @@ function useFilters<T>(
 
   const hasFilters = useCallback(() => {
     for (const key of params.keys()) {
-      console.log(`checking key ${key}`);
       if (key.startsWith(buildKey(SearchParamsKeys.FILTER))) return true;
     }
-    console.log(`Não achou`);
     return false;
   }, [buildKey, params]);
 
