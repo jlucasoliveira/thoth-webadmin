@@ -142,7 +142,7 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
           }
         />
       </FieldsContainer>
-      <Table columns={columns} data={fields} pages={data?.meta?.pages ?? 1} />
+      <Table forceScroll columns={columns} data={fields} pages={data?.meta?.pages ?? 1} />
     </>
   );
 }
