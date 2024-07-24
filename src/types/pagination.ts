@@ -4,21 +4,23 @@ type DescOrder<T = object> = {
   [key in keyof T as `-${key & string}`]: T[key];
 };
 
-export type Operator = 'eq' | 'ne' | 'ilike' | 'date';
-
 export type Sort<T> = keyof T | keyof DescOrder<T>;
 
-export type Filter<T> = {
-  [key in keyof T]?: {
-    [operator in Operator]?: string | number | string[];
-  } & {
-    or?: Array<string> | Array<number>;
-    in?: string[];
-    between?: [startValue: string, endValue: string];
-  };
+export type Operator = 'eq' | 'ne' | 'like' | 'ilike' | 'date' | 'gt' | 'gte' | 'lt' | 'lte';
+
+export type Query<T> = Partial<Record<Operator, T>> & {
+  or?: Array<FilterOperator<T>>;
+  in?: string[] | number[];
+  between?: [startValue: string, endValue: string] | [startValue: number, endValue: number];
 };
 
-type Flatten<T> = T extends any[] ? T[number] : T;
+export type FilterOperator<T> = {
+  [key in keyof T]?: T[key] extends Record<string, any> ? FilterOperator<T[key]> : Query<T[key]>;
+};
+
+export type Filter<T> = FilterOperator<T> | Array<FilterOperator<T>>;
+
+export type Flatten<T> = T extends any[] ? T[number] : T;
 
 type Include<T> = {
   [key in keyof T]?: Flatten<T[key]> extends BaseEntity ? boolean | Include<T[key]> : undefined;
