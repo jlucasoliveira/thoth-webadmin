@@ -39,6 +39,7 @@ type TableProps<T> = {
   pages: number;
   frontPagination?: FrontPaginationProps;
   filtersContext?: string;
+  forceScroll?: boolean;
 };
 
 function Table<T>(props: TableProps<T>) {
@@ -93,6 +94,8 @@ function Table<T>(props: TableProps<T>) {
         position="relative"
         roundedTop={8}
         flexGrow={1}
+        overflowY={props.forceScroll ? undefined : 'hidden'}
+        __css={props.forceScroll ? { '-webkit-scrollbar': { display: 'none' } } : undefined}
       >
         <ChakraTable size="sm">
           <Thead

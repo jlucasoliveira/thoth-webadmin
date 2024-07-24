@@ -1,5 +1,6 @@
 import { isValid } from 'date-fns';
-import { BaseEntity, baseEntityColumns } from '@/types/common';
+import { Flatten } from '../types/pagination';
+import { BaseEntity, baseEntityColumns } from '../types/common.d';
 
 export async function sleep(ms = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -63,3 +64,18 @@ export function iterableOR(obj?: Record<string, any> | Array<any>): boolean {
 
 export const UUID_REGEX =
   /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
+
+// https://medium.com/xgeeks/typescript-utility-keyof-nested-object-fa3e457ef2b2
+export type NestedKeyOf<ObjectType extends object> = {
+  [Key in keyof ObjectType & (string | number)]: Flatten<ObjectType[Key]> extends object
+    ? `${Key}` | `${Key}.${NestedKeyOf<Flatten<ObjectType[Key]>>}`
+    : `${Key}`;
+}[keyof ObjectType & (string | number)];
+
+export function buildObject<T extends object, R>(
+  path: NestedKeyOf<T>,
+  value: R
+): Record<string, object> {
+  const keys = path.split('.');
+  return keys.reduceRight((acc, cur) => ({ [cur]: acc }) as any, value) as Record<string, object>;
+}

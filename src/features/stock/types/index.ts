@@ -1,5 +1,6 @@
 import { BaseEntity } from '@/types/common';
 import { UserModel } from '@/features/auth/types';
+import { ProductVariationModel } from '@/features/products/types';
 
 export enum StockKind {
   Entry = 'ENTRY',
@@ -21,4 +22,5 @@ export type StockModel = BaseEntity & {
   quantity: number;
   productId: string;
   minQuantity: number;
+  variation?: ProductVariationModel;
 };

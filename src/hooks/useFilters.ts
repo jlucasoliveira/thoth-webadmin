@@ -1,7 +1,8 @@
-import { Filter, Operator, Pagination, Sort } from '@/types/pagination';
-import { SortingState, Updater } from '@tanstack/react-table';
+import qs from 'qs';
 import { useCallback, useMemo } from 'react';
+import { SortingState, Updater } from '@tanstack/react-table';
 import { SetURLSearchParams, useSearchParams } from 'react-router-dom';
+import { Filter, Operator, Pagination, Sort } from '@/types/pagination';
 
 const PAGE_SIZE = 10;
 export enum SearchParamsKeys {
@@ -39,6 +40,7 @@ type Filters<T> = {
   addParam: (param: string, value: string) => void;
   removeParam: (param: string) => void;
   getParam: (param: string) => string | null;
+  hasFilters: () => boolean;
 };
 
 function useFilters<T>(
@@ -59,8 +61,12 @@ function useFilters<T>(
   }, []);
 
   const createFilterKey = useCallback(
-    (key?: keyof T, op?: Operator): string => {
-      const param: string = buildKey(SearchParamsKeys.FILTER);
+    (key?: keyof T, op?: Operator, idx?: number): string => {
+      const defaultParams = idx !== undefined ? [idx.toString()] : [];
+      const param: string = createFilterKeyValue(
+        buildKey(SearchParamsKeys.FILTER),
+        ...defaultParams
+      );
       if (key && op) return createFilterKeyValue(param, key as string, op as string);
       if (key) return createFilterKeyValue(param, key as string);
       return param;
@@ -68,37 +74,11 @@ function useFilters<T>(
     [buildKey, createFilterKeyValue]
   );
 
-  const parseFilters = useCallback((filters: [string, string][]): Filter<T> => {
-    const regex = /\[[0-9a-zA-Z]+]/g;
-    return filters.reduce((acc = {}, [key, value]) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [attr, op, idx] = Array.from(key.match(regex) || []).map((matched) =>
-        matched.replaceAll(/\[|]/g, '')
-      );
-      if (op === 'in' && idx) {
-        acc[attr as keyof T] = {
-          ...(acc[attr as keyof T] || {}),
-          in: [...(acc[attr as keyof T]?.in || []), value],
-        };
-      } else if (op === 'between' && idx) {
-        const between = acc[attr as keyof T]?.between || Array(2);
-        between.splice(Number(idx), 1, value);
-        acc[attr as keyof T] = {
-          ...acc[attr as keyof T],
-          between,
-        };
-      } else acc[attr as keyof T] = { ...(acc[attr as keyof T] || {}), [op]: value };
-      return acc;
-    }, {} as Filter<T>);
-  }, []);
-
   const query = useMemo(() => {
-    const page = params.get(buildKey(SearchParamsKeys.PAGE));
-    const orders = params.get(buildKey(SearchParamsKeys.ORDER));
-    const filters = Array.from(params.entries()).filter(([key]) =>
-      key.startsWith(createFilterKey())
-    );
-
+    const parsed = qs.parse(params.toString());
+    const page = parsed[buildKey(SearchParamsKeys.PAGE)];
+    const orders = parsed[buildKey(SearchParamsKeys.ORDER)];
+    const filter = parsed[buildKey(SearchParamsKeys.FILTER)] as Filter<T>;
     const pageNumber = Number(page) || 1;
 
     const pagination: Pagination<T> = {
@@ -106,10 +86,10 @@ function useFilters<T>(
       limit: pageSize,
       skip: (pageNumber - 1) * pageSize,
       sort: orders as Sort<T>,
-      filter: parseFilters(filters),
+      filter,
     };
     return pagination;
-  }, [params, buildKey, pageSize, parseFilters, createFilterKey]);
+  }, [params, buildKey, pageSize]);
 
   const sorting: SortingState = useMemo(() => {
     const order = params.getAll(buildKey(SearchParamsKeys.ORDER));
@@ -142,6 +122,13 @@ function useFilters<T>(
     });
   }, [setParams]);
 
+  const hasFilters = useCallback(() => {
+    for (const key of params.keys()) {
+      if (key.startsWith(buildKey(SearchParamsKeys.FILTER))) return true;
+    }
+    return false;
+  }, [buildKey, params]);
+
   const addFilter = useCallback(
     (key: keyof T, op: Operator, value: string | number) => {
       setParams((params) => {
@@ -168,35 +155,14 @@ function useFilters<T>(
 
   const replaceFilter = useCallback(
     (filters: Filter<T>) => {
-      setParams((params) => {
-        params.forEach((_, key) => {
-          if (key.startsWith(createFilterKey())) params.delete(key);
-        });
-        Object.entries(filters).forEach(([key, operations]) => {
-          Object.entries(operations as object).forEach(([op, value]) => {
-            const newKey = createFilterKey(key as keyof T, op as Operator);
-            if (Array.isArray(value)) {
-              value.forEach((subValue, idx) => {
-                Object.entries(subValue).forEach(([innerKey, innerOperation]) => {
-                  Object.entries(innerOperation as object).forEach(([innerOp, innerValue]) => {
-                    const subKey = createFilterKeyValue(
-                      undefined,
-                      `${idx}`,
-                      innerKey,
-                      innerOp as string
-                    );
-                    params.set(newKey.concat(subKey), innerValue);
-                  });
-                });
-              });
-            } else params.set(newKey, value.toString());
-          });
-        });
+      setParams(() => {
+        const parsed = qs.stringify({ [buildKey(SearchParamsKeys.FILTER)]: filters });
+        const params = new URLSearchParams(parsed);
         params.set(buildKey(SearchParamsKeys.PAGE), '1');
         return params;
       });
     },
-    [setParams, buildKey, createFilterKey, createFilterKeyValue]
+    [setParams, buildKey]
   );
 
   const addParam = useCallback(
@@ -345,6 +311,7 @@ function useFilters<T>(
     getParam,
     addParam,
     removeParam,
+    hasFilters,
   };
 }
 

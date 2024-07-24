@@ -10,38 +10,32 @@ import { useFilters } from '@/hooks/useFilters';
 import { ReactComponent as FilterIcon } from '@/assets/icons/navigation/filter.svg';
 import { useCallback } from 'react';
 import { Operator, Filter as PaginationFilter } from '@/types/pagination';
+import { buildObject, NestedKeyOf } from '@/utils/helpers';
 
 type Value = {
   label: string;
   value: string;
 };
 
-export type Option<T> = {
+export type Option<T extends object> = {
   label: string;
-  key: keyof T;
+  key: NestedKeyOf<T>;
   operator: Operator;
   defaultValue?: string;
   type?: 'radio' | 'checkbox';
   values: Value[];
 };
 
-type Filter<T> = {
+type Filter<T extends object> = {
   options: Option<T>[];
 };
 
-function Filter<T>(props: Filter<T>) {
+function Filter<T extends object>(props: Filter<T>) {
   const { replaceFilter } = useFilters<T>();
 
   const handleOnChange = useCallback(
-    (key: keyof T, op: Operator, value: string | string[]) => {
-      const props =
-        value === 'all'
-          ? {}
-          : {
-              [key]: {
-                [op]: Array.isArray(value) ? value[0] : value,
-              },
-            };
+    (key: NestedKeyOf<T>, op: Operator, value: string | string[]) => {
+      const props = value === 'all' ? {} : buildObject(key, { [op]: value });
 
       replaceFilter(props as unknown as PaginationFilter<T>);
     },
