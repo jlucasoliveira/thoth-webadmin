@@ -19,6 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Search } from '@/components/Form';
 import { Filter, Option } from '@/components/Elements';
 import { useFilters } from '@/hooks/useFilters';
+import type { Filter as Filters } from '@/types/pagination';
 
 const schema = yup.object().shape({
   search: yup.string().required('Informe algo a ser buscado'),
@@ -30,13 +31,15 @@ const defaultValues: FormType = {
   search: '',
 };
 
+type SearchBuilder<T> = (term: string) => Filters<T>;
+
 type Tab = {
   title?: string;
   tab: string;
   component: ReactNode;
 };
 
-type ListWrapper<T> = {
+type ListWrapper<T extends object> = {
   title: string;
   registrationRoute?: string;
   ButtonAction?: ElementType;
@@ -47,9 +50,10 @@ type ListWrapper<T> = {
   searchField?: keyof T | string;
   tabs?: Tab[];
   containerProps?: FlexProps;
+  searchBuilder?: SearchBuilder<T>;
 };
 
-function ListWrapper<T>({
+function ListWrapper<T extends object>({
   registrationRoute,
   title,
   addButtonText,
@@ -60,9 +64,10 @@ function ListWrapper<T>({
   FilterElement,
   containerProps,
   tabs = [],
+  searchBuilder,
 }: ListWrapper<T>) {
   const navigate = useNavigate();
-  const { currentTab, addFilter, changeTab, removeFilter } = useFilters();
+  const { currentTab, addFilter, changeTab, replaceFilter, removeFilter } = useFilters();
   const { control, handleSubmit, reset } = useForm<FormType>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -76,7 +81,8 @@ function ListWrapper<T>({
   );
 
   function onSubmit({ search }: FormType) {
-    addFilter(searchField as never, 'ilike', search);
+    if (searchBuilder) replaceFilter(searchBuilder(search));
+    else addFilter(searchField as never, 'ilike', search);
   }
 
   function onCleanSearchField() {
