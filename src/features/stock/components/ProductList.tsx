@@ -10,7 +10,13 @@ import { StockRoutes } from '../routes/constants';
 
 function ProductList() {
   const { query } = useFilters();
-  const variations = useVariations({ params: { ...query, include: { stock: true } } });
+  const variations = useVariations({
+    params: {
+      ...query,
+      filter: { stock: { quantity: { gt: 0 } }, ...query.filter },
+      include: { stock: true },
+    },
+  });
 
   const columns = useMemo<ColumnDef<ProductVariationModel>[]>(
     () => [
