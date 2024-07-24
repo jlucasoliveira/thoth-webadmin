@@ -30,7 +30,6 @@ function Products() {
       title="Estoque"
       filters={filters}
       searchBuilder={searchBuilder}
-      asDefault="stock.quantity"
       List={ProductList}
     />
   );
