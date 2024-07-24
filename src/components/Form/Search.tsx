@@ -48,25 +48,25 @@ function Search<T extends FieldValues>({ handleSearch, clearSearch, ...props }: 
                 bgColor="gray.100"
               />
               <InputRightElement>
-                {fieldProps.field.value !== fieldProps.formState?.defaultValues?.[props.name] ? (
-                  <IconButton
-                    variant="unstyled"
-                    size="sm"
-                    minW={0}
-                    rounded="full"
-                    aria-label="Buscar termo informado"
-                    onClick={clearSearch}
-                    icon={<CloseIcon color="blue.400" />}
-                  />
-                ) : null}
+                <IconButton
+                  isDisabled={!fieldProps.fieldState.isDirty}
+                  variant="unstyled"
+                  size="sm"
+                  minW={0}
+                  rounded="full"
+                  aria-label="Buscar termo informado"
+                  onClick={clearSearch}
+                  icon={<CloseIcon color="blue.400" />}
+                />
                 <IconButton
                   variant="unstyled"
                   minW={0}
                   rounded="full"
                   aria-label="Buscar termo informado"
                   onClick={handleSearch}
-                  mx={2}
                   icon={<SearchIcon color="blue.400" />}
+                  ml="2"
+                  mr="1"
                 />
               </InputRightElement>
             </InputGroup>
