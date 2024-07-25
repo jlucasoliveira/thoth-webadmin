@@ -9,6 +9,7 @@ import { StockRoutes } from '@/features/stock/routes/constants';
 import { ProductRoutes } from '@/features/products/routes/constants';
 import { BrandsRoutes } from '@/features/brands/routes/constants';
 import { CategoriesRoutes } from '@/features/categories/routes/constants';
+import { OrderRoutes } from '@/features/orders/routes/constants';
 
 type _Children = {
   label: string;
@@ -62,6 +63,12 @@ export const options: Menu = {
       label: 'Gestão de estoque',
       icon: EstoqueIcon,
       to: StockRoutes.List,
+    },
+    {
+      id: 'orders',
+      label: 'Compras',
+      icon: LubrificanteIcon,
+      to: OrderRoutes.List,
     },
   ],
 };

@@ -7,6 +7,7 @@ const { CategoriesRoutes } = lazyImport(() => import('@/features/categories'), '
 const { ProductRoutes } = lazyImport(() => import('@/features/products'), 'ProductRoutes');
 const { StockRoutes } = lazyImport(() => import('@/features/stock'), 'StockRoutes');
 const { UserRoutes } = lazyImport(() => import('@/features/users'), 'UserRoutes');
+const { OrderRoutes } = lazyImport(() => import('@/features/orders'), 'OrderRoutes');
 
 const privateRoutes: RouteObject[] = [
   {
@@ -18,6 +19,7 @@ const privateRoutes: RouteObject[] = [
       { path: 'products/*', element: <ProductRoutes /> },
       { path: 'stocks/*', element: <StockRoutes /> },
       { path: 'users/*', element: <UserRoutes /> },
+      { path: 'orders/*', element: <OrderRoutes /> },
     ],
   },
 ];
