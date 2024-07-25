@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Select, { InputActionMeta, Props } from 'react-select';
 import { ActionMeta, CSSObjectWithLabel, GroupBase } from 'react-select';
 import {
@@ -11,8 +11,10 @@ import {
 } from 'react-hook-form';
 import { useTheme } from '@chakra-ui/react';
 import { UseFetch } from '@/lib/react-query';
+import { useDebounce } from '@/hooks/useDebounce';
 import { BaseEntity } from '@/types/common';
-import { Filter } from '@/types/pagination';
+import { Filter, Pagination } from '@/types/pagination';
+import type { SearchBuilder } from '@/components/Layout/ListWrapper';
 import { Loading } from '../Elements';
 import { FieldWrapper, FieldWrapperProps } from '.';
 
@@ -30,10 +32,11 @@ export type SearchableSelectProps<
     defaultOption?: IsMulti extends true ? F[] : F;
     handleSetValue?: (data: IsMulti extends true ? F[] : F) => void;
     searchField?: keyof F;
-    fetcherExtraParams?: P;
+    fetcherExtraParams?: Partial<Pagination<F>>;
     fetcherFilters?: Filter<F>;
     refetch?: boolean;
     forceFetch?: boolean;
+    searchBuilder?: SearchBuilder<F>;
   };
 
 function SearchableSelect<
@@ -59,6 +62,7 @@ function SearchableSelect<
   refetch,
   forceFetch = false,
   isMulti,
+  searchBuilder,
   ...props
 }: SearchableSelectProps<F, T, IsMulti, P>) {
   const isMounted = useRef<boolean>(false);
@@ -67,15 +71,20 @@ function SearchableSelect<
     field: { value },
   } = useController({ control, name });
   const [search, setSearch] = useState<string | undefined>(undefined);
+  const deboundSearch = useDebounce(search, 300);
+
+  const filters = useMemo(() => {
+    if (!deboundSearch) return {} as Filter<F>;
+    if (searchBuilder) return searchBuilder(deboundSearch);
+    return { [searchField]: { ilike: deboundSearch } };
+  }, [deboundSearch, searchField, searchBuilder]);
+
   const fetched = useFetch({
     params: {
-      filter: {
-        [searchField]: search ? { ilike: search } : undefined,
-        ...fetcherFilters,
-      } as Filter<F>,
+      filter: { ...filters, ...fetcherFilters, ...fetcherExtraParams?.filter } as Filter<F>,
       pageNumber: 1,
       skip: 0,
-      args: fetcherExtraParams,
+      ...fetcherExtraParams,
     },
     config: { enabled: forceFetch || refetch === undefined },
   });

@@ -23,7 +23,9 @@ export type Filter<T> = FilterOperator<T> | Array<FilterOperator<T>>;
 export type Flatten<T> = T extends any[] ? T[number] : T;
 
 type Include<T> = {
-  [key in keyof T]?: Flatten<T[key]> extends BaseEntity ? boolean | Include<T[key]> : undefined;
+  [key in keyof T]?: Flatten<T[key]> extends BaseEntity
+    ? boolean | Include<Flatten<T[key]>>
+    : undefined;
 };
 
 export type Pagination<T = object> = {

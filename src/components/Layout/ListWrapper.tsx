@@ -31,7 +31,7 @@ const defaultValues: FormType = {
   search: '',
 };
 
-type SearchBuilder<T> = (term: string) => Filters<T>;
+export type SearchBuilder<T> = (term: string) => Filters<T>;
 
 type Tab = {
   title?: string;
