@@ -48,3 +48,10 @@ export function currencyFormat(value?: number | null) {
     style: 'currency',
   }).format(value);
 }
+
+export function dateFormat(value: string | Date | number | null): string {
+  if (value === null) return '-';
+  if (typeof value === 'string') value = new Date(value);
+
+  return new Intl.DateTimeFormat('pt-br', { dateStyle: 'short', timeStyle: 'short' }).format(value);
+}
