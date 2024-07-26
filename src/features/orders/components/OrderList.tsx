@@ -11,7 +11,7 @@ import { currencyFormat, dateFormat } from '@/utils/format';
 
 function OrderList() {
   const { query } = useFilters();
-  const products = useOrders({ params: { ...query, include: { client: true, seller: true } } });
+  const orders = useOrders({ params: { ...query, include: { client: true, seller: true } } });
 
   const columns = useMemo<ColumnDef<OrderModel>[]>(
     () => [
@@ -46,18 +46,14 @@ function OrderList() {
     []
   );
 
-  if (products.isFetching || products.isLoading) {
+  if (orders.isFetching || orders.isLoading) {
     return <Loading />;
-  } else if (!products.data) {
+  } else if (!orders.data) {
     return null;
   }
 
   return (
-    <Table
-      columns={columns}
-      data={products.data.data || []}
-      pages={products.data.meta.pages || 0}
-    />
+    <Table columns={columns} data={orders.data.data || []} pages={orders.data.meta.pages || 0} />
   );
 }
 
