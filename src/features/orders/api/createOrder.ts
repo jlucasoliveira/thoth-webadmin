@@ -17,6 +17,7 @@ export type Payload = Omit<
 > & {
   clientId?: string;
   items: PayloadItem[];
+  retainedStock?: boolean;
 };
 
 async function createOrder(payload: Payload) {
