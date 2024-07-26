@@ -23,14 +23,12 @@ const itemSchema = object().shape({
 export const schema = object().shape({
   id: string().optional(),
   paid: boolean().default(false),
-  persistStock: boolean().default(true),
+  installments: number().default(1),
+  retainedStock: boolean().default(false),
   client: mixed<ClientModel>().optional(),
   seller: mixed<UserModel>().optional(),
   total: string(),
-  totalPaid: number()
-    .default(0)
-    .typeError('Infome um valor válido')
-    .min(0, 'Informe um número positivo'),
+  totalPaid: number(),
   items: array(itemSchema),
 });
 
@@ -48,6 +46,6 @@ export type FormTempType = InferType<typeof tempVariationSchema>;
 
 export const defaultValues: FormType = {
   paid: false,
-  persistStock: true,
-  totalPaid: 0,
+  retainedStock: false,
+  installments: 1,
 };

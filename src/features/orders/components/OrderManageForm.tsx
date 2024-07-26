@@ -131,7 +131,6 @@ function OrderManageForm({
 
   useEffect(() => {
     setValue('total', currencyFormat(totalPaid));
-    setValue('totalPaid', Number(totalPaid.toFixed(2)));
   }, [totalPaid, setValue]);
 
   return (
@@ -148,7 +147,8 @@ function OrderManageForm({
         <FieldsContainer
           title="Dados da compra"
           gridProps={{ alignItems: 'flex-start' }}
-          templateColumn={5}
+          columnsByRow={6}
+          templateColumn="1fr 1fr 1fr 0.5fr 0.5fr 1fr"
         >
           <SearchableSelect
             control={control}
@@ -159,13 +159,32 @@ function OrderManageForm({
             searchField="name"
           />
           <Input isReadOnly control={control} name="total" label="Total" />
-          <Input isDisabled={!isFormEdit} control={control} name="totalPaid" label="Total pago" />
-          <Checkbox isDisabled={!isFormEdit} control={control} name="paid" label="Pago" />
+          <Input
+            isDisabled={!isFormEdit}
+            control={control}
+            name="totalPaid"
+            label="Total pago"
+            type="number"
+          />
+          <Input
+            isDisabled={!isFormEdit}
+            control={control}
+            name="installments"
+            label="Parcelas"
+            type="number"
+          />
           <Checkbox
             isDisabled={!isFormEdit}
             control={control}
-            name="persistStock"
-            label="Reduzir estoque"
+            name="paid"
+            label="Pago"
+            type="number"
+          />
+          <Checkbox
+            isDisabled={!isFormEdit}
+            control={control}
+            name="retainedStock"
+            label="Manter estoque"
           />
         </FieldsContainer>
         {props.id ? null : (

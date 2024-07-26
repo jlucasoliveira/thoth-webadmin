@@ -17,8 +17,9 @@ export type OrderItemModel = BaseEntityInt & {
 export type OrderModel = BaseEntity & {
   paid: boolean;
   total: number;
-  totalPaid: number;
+  totalPaid?: number;
   paidDate?: string;
+  installments?: number;
   clientId: string;
   sellerId: string;
   paymentId?: string;
