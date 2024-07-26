@@ -15,9 +15,8 @@ function DeleteClient({ id, isDefault }: DeleteClient) {
   const { isLoading, mutateAsync } = useDeleteClient();
   const confirmationHandler = useCallback(
     async (id: string) => {
-      console.log(`Excluíndo ${id}`);
-      // await mutateAsync(id);
-      // navigate(-1);
+      await mutateAsync(id);
+      navigate(-1);
     },
     [mutateAsync, navigate]
   );
