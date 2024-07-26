@@ -15,8 +15,8 @@ function ClientList() {
   const columns = useMemo<ColumnDef<ClientModel>[]>(
     () => [
       { header: 'Cliente', accessorKey: 'name', enableSorting: false },
-      { header: 'Total', accessorKey: 'email', enableSorting: false },
-      { header: 'Total', accessorKey: 'phoneNumber', enableSorting: false },
+      { header: 'E-mail', accessorKey: 'email', enableSorting: false },
+      { header: 'Telefone', accessorKey: 'phoneNumber', enableSorting: false },
       {
         header: 'Ações',
         accessorKey: 'id',
