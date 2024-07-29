@@ -49,3 +49,13 @@ export const defaultValues: FormType = {
   retainedStock: false,
   installments: 1,
 };
+
+export const paymentSchema = object().shape({
+  value: number().positive('Informe um valor positivo').typeError('Informe um número válido'),
+});
+
+export type PaymentFormType = InferType<typeof paymentSchema>;
+
+export const paymentDefaultValues: PaymentFormType = {
+  value: 0,
+};
