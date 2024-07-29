@@ -24,7 +24,7 @@ function OrderList() {
       },
       { header: 'Pago', accessorFn: (row) => (row.paid ? 'Sim' : 'Não'), enableSorting: false },
       { header: 'Vendedor', accessorKey: 'seller.name', enableSorting: false },
-      { header: 'Data', accessorFn: (row) => dateFormat(row.createdAt) },
+      { id: 'createdAt', header: 'Data', accessorFn: (row) => dateFormat(row.createdAt) },
       {
         header: 'Ações',
         accessorKey: 'id',

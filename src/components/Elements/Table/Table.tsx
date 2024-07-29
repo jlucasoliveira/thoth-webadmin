@@ -125,8 +125,8 @@ function Table<T>(props: TableProps<T>) {
                       position="relative"
                       colSpan={header.colSpan}
                       textTransform="capitalize"
-                      onClick={() =>
-                        !props.frontPagination ? header.column.getToggleSortingHandler() : null
+                      onClick={
+                        !props.frontPagination ? header.column.getToggleSortingHandler() : undefined
                       }
                       cursor={
                         header.column.getCanSort() && !props.frontPagination ? 'pointer' : 'default'

@@ -13,13 +13,11 @@ function BrandsList() {
 
   const columns = useMemo<ColumnDef<BrandModel>[]>(
     () => [
-      {
-        header: 'Nome',
-        accessorKey: 'name',
-      },
+      { id: 'name', header: 'Nome', accessorKey: 'name' },
       {
         header: 'Percentual de lucro',
         accessorKey: 'profitRate',
+        enableSorting: false,
       },
       {
         header: 'Ações',

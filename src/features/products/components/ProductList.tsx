@@ -7,15 +7,21 @@ import { Actions, generateDefaultActions } from '@/components/Elements/Table';
 import { ProductRoutes } from '../routes/constants';
 import { useProducts } from '../api/getProducts';
 import { ProductModel } from '../types';
+import { dateFormat } from '@/utils/format';
 
 function ProductList() {
   const { query } = useFilters();
-  const products = useProducts({ params: query });
+  const products = useProducts({ params: { ...query, include: { brand: true } } });
 
   const columns = useMemo<ColumnDef<ProductModel>[]>(
     () => [
-      { header: 'Nome', accessorKey: 'name' },
-      { header: 'Volume', accessorKey: 'volume' },
+      { id: 'name', header: 'Nome', accessorKey: 'name' },
+      { header: 'Marca', enableSorting: false, accessorKey: 'brand.name' },
+      {
+        id: 'createdAt',
+        header: 'Data de criação',
+        accessorFn: (row) => dateFormat(row.createdAt),
+      },
       {
         header: 'Ações',
         accessorKey: 'id',

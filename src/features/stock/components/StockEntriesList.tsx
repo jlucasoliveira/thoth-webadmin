@@ -26,7 +26,7 @@ function StockEntriesList({ variationId, stockId }: StockEntriesList) {
 
   const columns = useMemo<ColumnDef<StockEntryModel>[]>(
     () => [
-      { header: 'Emissor', accessorKey: 'user.name' },
+      { header: 'Emissor', accessorKey: 'user.name', enableSorting: false },
       { accessorFn: (row) => translateStockKind(row.kind), header: 'Tipo', enableSorting: false },
       { accessorKey: 'amount', header: 'Quantidade', enableSorting: false },
       {
@@ -35,10 +35,12 @@ function StockEntriesList({ variationId, stockId }: StockEntriesList) {
         accessorFn: (row) => currencyFormat(row.costPrice ?? 0),
       },
       {
+        id: 'createdAt',
         accessorFn: ({ entryDate }) => format(new Date(entryDate), 'dd/MM/yyyy'),
         header: 'Data de entrada',
       },
       {
+        id: 'expirationDate',
         accessorFn: ({ expirationDate }) => format(new Date(expirationDate), 'dd/MM/yyyy'),
         header: 'Data de vencimento',
       },
