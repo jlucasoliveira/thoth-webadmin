@@ -15,7 +15,9 @@ export type Query<T> = Partial<Record<Operator, T>> & {
 };
 
 export type FilterOperator<T> = {
-  [key in keyof T]?: T[key] extends Record<string, any> ? FilterOperator<T[key]> : Query<T[key]>;
+  [key in keyof T]?: Flatten<T[key]> extends Record<string, any>
+    ? FilterOperator<Flatten<T[key]>>
+    : Query<Flatten<T[key]>>;
 };
 
 export type Filter<T> = FilterOperator<T> | Array<FilterOperator<T>>;
