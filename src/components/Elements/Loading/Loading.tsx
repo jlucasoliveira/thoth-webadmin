@@ -1,12 +1,13 @@
-import { Center, Spinner } from '@chakra-ui/react';
+import { Center, CenterProps, Spinner } from '@chakra-ui/react';
 
 type Loading = {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xs';
+  centerProps?: CenterProps;
 };
 
-function Loading({ size = 'xl' }: Loading) {
+function Loading({ size = 'xl', centerProps }: Loading) {
   return (
-    <Center h="full" w="full">
+    <Center h="full" w="full" {...centerProps}>
       <Spinner color="blue" size={size} />
     </Center>
   );
