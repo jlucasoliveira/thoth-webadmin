@@ -1,7 +1,8 @@
 import { BaseEntity, BaseEntityInt } from '@/types/common';
-import { Gender } from './gender';
-import { StockModel } from '@/features/stock/types';
 import { CategoryModel } from '@/features/categories/types';
+import { BrandModel } from '@/features/brands/types';
+import { StockModel } from '@/features/stock/types';
+import { Gender } from './gender';
 export * from './gender';
 
 export type ProductVariationModel = BaseEntity & {
@@ -14,6 +15,7 @@ export type ProductVariationModel = BaseEntity & {
   weight?: number;
   volume?: number;
   gender?: Gender;
+
   readonly categories: CategoryModel[];
   readonly product: ProductModel;
   readonly stock: StockModel;
@@ -22,4 +24,6 @@ export type ProductVariationModel = BaseEntity & {
 export type ProductModel = BaseEntityInt & {
   name: string;
   brandId: number;
+
+  readonly brand: BrandModel;
 };

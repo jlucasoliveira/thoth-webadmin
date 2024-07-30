@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, Flex, IconButton } from '@chakra-ui/react';
+import { DeleteIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ColumnDef } from '@tanstack/react-table';
@@ -10,8 +10,13 @@ import { Table } from '@/components/Elements';
 import { SubHeader } from '@/components/Layout';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { Checkbox, Form, Input, SearchableSelect } from '@/components/Form';
-import { OrderModel } from '../types';
+import { useClients } from '@/features/clients/api/getClients';
+import { PaymentList } from '@/features/payments/components/PaymentList';
+import { useVariations } from '@/features/products/api/variations/getVariations';
+import { currencyFormat } from '@/utils/format';
 import { OrderRoutes } from '../routes/constants';
+import { OrderModel } from '../types';
+import { PaymentModal } from './PaymentModel';
 import {
   FormType,
   FormItemType,
@@ -20,9 +25,6 @@ import {
   schema,
   tempVariationSchema,
 } from './validations';
-import { useVariations } from '@/features/products/api/variations/getVariations';
-import { currencyFormat } from '@/utils/format';
-import { useClients } from '@/features/clients/api/getClients';
 
 function OrderManageForm({
   onSubmit,
@@ -131,7 +133,6 @@ function OrderManageForm({
 
   useEffect(() => {
     setValue('total', currencyFormat(totalPaid));
-    setValue('totalPaid', Number(totalPaid.toFixed(2)));
   }, [totalPaid, setValue]);
 
   return (
@@ -143,12 +144,14 @@ function OrderManageForm({
         onClick={handleSubmit(onSubmit)}
         goBack={() => navigate(OrderRoutes.List)}
         title={title}
+        rightActions={<PaymentModal data={data} />}
       />
       <Form loading={fetchingLoading}>
         <FieldsContainer
           title="Dados da compra"
           gridProps={{ alignItems: 'flex-start' }}
-          templateColumn={5}
+          columnsByRow={6}
+          templateColumn="1fr 1fr 1fr 0.5fr 0.5fr 1fr"
         >
           <SearchableSelect
             control={control}
@@ -159,49 +162,78 @@ function OrderManageForm({
             searchField="name"
           />
           <Input isReadOnly control={control} name="total" label="Total" />
-          <Input isDisabled={!isFormEdit} control={control} name="totalPaid" label="Total pago" />
-          <Checkbox isDisabled={!isFormEdit} control={control} name="paid" label="Pago" />
-          <Checkbox
+          <Input
+            isDisabled={!!data?.id}
+            control={control}
+            name="totalPaid"
+            label="Total pago"
+            type="number"
+          />
+          <Input
             isDisabled={!isFormEdit}
             control={control}
-            name="persistStock"
-            label="Reduzir estoque"
+            name="installments"
+            label="Parcelas"
+            type="number"
+          />
+          <Checkbox
+            isDisabled={totalPaid === data?.total || data?.paid}
+            control={control}
+            name="paid"
+            label="Pago"
+            type="number"
+          />
+          <Checkbox
+            isDisabled={!!data?.id}
+            control={control}
+            name="retainedStock"
+            label="Manter estoque"
           />
         </FieldsContainer>
-        {props.id ? null : (
-          <FieldsContainer templateColumn={5} gridProps={{ alignItems: 'center' }}>
-            <SearchableSelect
-              control={tempForm.control}
-              label="Variação"
-              name="variation"
-              useFetch={useVariations}
-              fetcherExtraParams={{
-                include: { stock: true },
-                filter: { stock: { quantity: { gt: 0 } } },
-              }}
-              searchBuilder={(ilike) => [
-                { variation: { ilike } },
-                { externalCode: { ilike } },
-                { product: { name: { ilike } } },
-              ]}
-              getOptionLabel={(option) => {
-                if (!option.variation) return option.product.name;
-                return `${option.product.name} ${option.variation}`;
-              }}
+        <Flex gap={2}>
+          <Flex flexGrow={2} direction="column">
+            {props.id ? null : (
+              <FieldsContainer templateColumn={5} gridProps={{ alignItems: 'center' }}>
+                <SearchableSelect
+                  control={tempForm.control}
+                  label="Variação"
+                  name="variation"
+                  useFetch={useVariations}
+                  fetcherExtraParams={{
+                    include: { stock: true },
+                    filter: { stock: { quantity: { gt: 0 } } },
+                  }}
+                  searchBuilder={(ilike) => [
+                    { variation: { ilike } },
+                    { externalCode: { ilike } },
+                    { product: { name: { ilike } } },
+                  ]}
+                  getOptionLabel={(option) => {
+                    if (!option.variation) return option.product.name;
+                    return `${option.product.name} ${option.variation}`;
+                  }}
+                />
+                <Input
+                  control={tempForm.control}
+                  type="number"
+                  name="quantity"
+                  label="Quantidade"
+                  required
+                />
+                <Button colorScheme="blue" mb="5" onClick={tempForm.handleSubmit(onTemSubmit)}>
+                  Adicionar Produto
+                </Button>
+              </FieldsContainer>
+            )}
+            <Table
+              title={data?.id ? 'Itens comprados' : undefined}
+              data={fields}
+              columns={columns}
+              pages={1}
             />
-            <Input
-              control={tempForm.control}
-              type="number"
-              name="quantity"
-              label="Quantidade"
-              required
-            />
-            <Button colorScheme="blue" mb="5" onClick={tempForm.handleSubmit(onTemSubmit)}>
-              Adicionar Produto
-            </Button>
-          </FieldsContainer>
-        )}
-        <Table data={fields} columns={columns} pages={1} />
+          </Flex>
+          <PaymentList orderId={data?.id} />
+        </Flex>
       </Form>
     </Flex>
   );

@@ -8,11 +8,13 @@ export function parseFormTypeToPayload(data: FormType): Payload {
   const total = data.items?.reduce((acc, cur) => acc + cur.quantity * cur.variation.price, 0) ?? 0;
   return {
     total,
-    clientId: data.client?.id,
     paid: data.paid,
+    clientId: data.client?.id,
     sellerId: state.user.id,
+    totalPaid: data.totalPaid,
+    installments: data.installments,
+    retainedStock: data.retainedStock,
     items:
       data.items?.map((cur) => ({ quantity: cur.quantity, variationId: cur.variation.id })) ?? [],
-    totalPaid: data.totalPaid ?? 0,
   };
 }

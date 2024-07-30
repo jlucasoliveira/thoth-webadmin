@@ -1,7 +1,8 @@
+import { BaseEntity, BaseEntityInt } from '@/types/common';
 import { UserModel } from '@/features/auth/types';
 import { ClientModel } from '@/features/clients/types';
+import { PaymentModel } from '@/features/payments/types';
 import { ProductVariationModel } from '@/features/products/types';
-import { BaseEntity, BaseEntityInt } from '@/types/common';
 
 export type OrderItemModel = BaseEntityInt & {
   quantity: number;
@@ -17,14 +18,14 @@ export type OrderItemModel = BaseEntityInt & {
 export type OrderModel = BaseEntity & {
   paid: boolean;
   total: number;
-  totalPaid: number;
+  totalPaid?: number;
   paidDate?: string;
+  installments?: number;
   clientId: string;
   sellerId: string;
-  paymentId?: string;
 
   readonly items: OrderItemModel[];
   readonly client: ClientModel;
   readonly seller: UserModel;
-  readonly payment: any;
+  readonly payments: PaymentModel[];
 };

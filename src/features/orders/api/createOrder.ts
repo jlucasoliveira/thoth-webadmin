@@ -13,10 +13,11 @@ export type PayloadItem = {
 
 export type Payload = Omit<
   OrderModel,
-  keyof BaseEntity | 'client' | 'seller' | 'payment' | 'items' | 'clientId'
+  keyof BaseEntity | 'client' | 'seller' | 'payments' | 'items' | 'clientId'
 > & {
   clientId?: string;
   items: PayloadItem[];
+  retainedStock?: boolean;
 };
 
 async function createOrder(payload: Payload) {

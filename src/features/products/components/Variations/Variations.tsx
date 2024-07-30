@@ -9,12 +9,14 @@ import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { useSendFileToBucket } from '@/features/attachments/api/sendFileToBucket';
 import { useDeleteAttachment } from '@/features/attachments/api/deleteAttachment';
 import { currencyFormat } from '@/utils/format';
-import { useVariationPartialUpdate } from '../../api/variations/partialUpdateVariation';
+import { Gender } from '../../types';
 import { useCreateVariation } from '../../api/variations/createVariation';
 import { useProductVariations } from '../../api/variations/getProductsVariation';
+import { useVariationPartialUpdate } from '../../api/variations/partialUpdateVariation';
 import { VARIATION_ID } from '../../utils/params';
-import { FormType, parseVariationToForm } from '../Forms/validation';
+import { translateGender } from '../../utils/translate';
 import { DeleteVariation } from '../Delete/DeleteVariation';
+import { FormType, parseVariationToForm } from '../Forms/validation';
 import { VariationModal, FormPayload } from './VariationModal';
 import { performCreation } from './utils';
 
@@ -39,12 +41,20 @@ function Variations({ productId, control, isEdit, isOpen, onOpen, onClose }: Var
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
-      { header: 'Nome', accessorFn: (row) => row.variation ?? '-' },
-      { header: 'Código de referência', accessorKey: 'externalCode' },
+      { header: 'Nome', enableSorting: false, accessorFn: (row) => row.variation ?? '-' },
+      { header: 'Código de referência', enableSorting: false, accessorKey: 'externalCode' },
       {
         header: 'Valor',
+        enableSorting: false,
         accessorFn: (row) => currencyFormat(row.price),
       },
+      {
+        header: 'Gênero',
+        enableSorting: false,
+        accessorFn: (row) => translateGender(row.gender as Gender),
+      },
+      { header: 'Volume', enableSorting: false, accessorKey: 'volume' },
+      { header: 'Peso', enableSorting: false, accessorKey: 'weight' },
       {
         header: 'Ações',
         accessorKey: '_id',

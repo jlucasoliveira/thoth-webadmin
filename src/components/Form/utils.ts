@@ -1,4 +1,5 @@
 import { Gender } from '@/features/products/types';
+import { translateGender } from '@/features/products/utils/translate';
 import { StockKind } from '@/features/stock/types';
 import { translateStockKind } from '@/features/stock/utils/kind';
 
@@ -17,11 +18,7 @@ export function generateConfirmationOption() {
 }
 
 export function generateGenderOption() {
-  return [
-    { label: 'Nenhum', value: Gender.None },
-    { label: 'Masculino', value: Gender.Male },
-    { label: 'Feminino', value: Gender.Female },
-  ];
+  return Object.values(Gender).map((value) => ({ value, label: translateGender(value) }));
 }
 
 export function generateStockKindOption() {

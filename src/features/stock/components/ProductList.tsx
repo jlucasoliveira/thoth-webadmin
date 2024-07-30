@@ -23,8 +23,10 @@ function ProductList() {
       {
         header: 'Produto',
         accessorKey: 'product.name',
+        enableSorting: false,
       },
       {
+        id: 'variation',
         header: 'Variação',
         accessorKey: 'variation',
       },

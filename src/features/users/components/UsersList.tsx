@@ -14,10 +14,10 @@ function UsersList() {
 
   const columns = useMemo<ColumnDef<UserModel>[]>(
     () => [
-      { header: 'Usuário', accessorKey: 'username' },
-      { header: 'Nome', accessorKey: 'name' },
-      { header: 'Telefone', accessorKey: 'phoneNumber' },
-      { header: 'Admin', accessorFn: (row) => (row.isAdmin ? 'Sim' : 'Não') },
+      { header: 'Usuário', accessorKey: 'username', enableSorting: false },
+      { header: 'Nome', accessorKey: 'name', id: 'name' },
+      { header: 'Telefone', accessorKey: 'phoneNumber', enableSorting: false },
+      { header: 'Admin', enableSorting: false, accessorFn: (row) => (row.isAdmin ? 'Sim' : 'Não') },
       {
         header: 'Ações',
         accessorKey: 'id',

@@ -13,11 +13,7 @@ function CategoriesList() {
 
   const columns = useMemo<ColumnDef<CategoryModel>[]>(
     () => [
-      {
-        header: 'Nome',
-        accessorKey: 'name',
-      },
-
+      { id: 'name', header: 'Nome', accessorKey: 'name' },
       {
         header: 'Ações',
         accessorKey: 'id',

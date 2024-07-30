@@ -5,6 +5,7 @@ import { ReactComponent as FornecedoresIcon } from '@/assets/icons/sidebar/forne
 import { ReactComponent as LubrificanteIcon } from '@/assets/icons/sidebar/lubrificante.svg';
 import { ReactComponent as EstoqueIcon } from '@/assets/icons/sidebar/estoque.svg';
 import { UserRoutes } from '@/features/users/routes/constants';
+import { ClientRoutes } from '@/features/clients/routes/constants';
 import { StockRoutes } from '@/features/stock/routes/constants';
 import { ProductRoutes } from '@/features/products/routes/constants';
 import { BrandsRoutes } from '@/features/brands/routes/constants';
@@ -39,6 +40,12 @@ export const options: Menu = {
       label: 'Usuários',
       icon: ClientIcon,
       to: UserRoutes.Users,
+    },
+    {
+      id: 'clients',
+      label: 'Clientes',
+      icon: ClientIcon,
+      to: ClientRoutes.List,
     },
     {
       id: 'brands',
