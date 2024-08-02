@@ -49,7 +49,7 @@ function useFilters<T>(
   const [params, setParams] = useSearchParams();
 
   const buildKeyName = useCallback(
-    (param: string) => `${context}${context ? '_' : ''}${param}`,
+    (param: string) => `${context}${context ? '|' : ''}${param}`,
     [context]
   );
 
