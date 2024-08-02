@@ -16,7 +16,7 @@ function FieldsContainer({
   children,
   title,
   columnGap = 5,
-  templateColumn = 4,
+  templateColumn = 5,
   columnsByRow = typeof templateColumn === 'number' ? templateColumn : 4,
   style,
   gridProps,

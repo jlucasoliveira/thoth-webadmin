@@ -91,11 +91,11 @@ function Item({ child, isChild, isDisabled, onClose, isSidebarOpen = true }: Ite
         onClose={onClose}
       >
         <ListItem
-          ml={isChild && isSidebarOpen ? 5 : 0}
-          rounded="full"
-          bg={isActive ? 'other.blueAlpha' : 'white'}
-          p="8px"
-          mb={3}
+          ml={isChild && isSidebarOpen ? 3 : 0}
+          rounded="2"
+          bg={isActive ? 'blue.500' : 'white'}
+          p={1}
+          mb={2}
           position="relative"
           style={{ display: 'flex' }}
           w={!isSidebarOpen && !child.children ? 'fit-content' : undefined}

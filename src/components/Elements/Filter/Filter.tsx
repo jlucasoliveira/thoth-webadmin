@@ -53,6 +53,7 @@ function Filter<T extends object>(props: Filter<T>) {
         borderStyle="solid"
         borderWidth="1px"
         borderColor="gray.390"
+        size="sm"
       />
       <MenuList zIndex={3}>
         {props.options.map((group) => (

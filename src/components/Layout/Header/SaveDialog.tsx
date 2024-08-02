@@ -14,21 +14,22 @@ function SaveDialog({ onClick, isEdit, loading, Button: Btn }: SaveDialogProps) 
 
   function handleClick() {
     if (!isEdit) onClick();
-    else confirmationDialogRef.current?.handleClick();
+    else confirmationDialogRef.current?.handleClick?.();
   }
 
   return (
     <>
       {Btn ? (
-        <Btn isLoading={loading} onClick={handleClick} />
+        <Btn size="sm" isLoading={loading} onClick={handleClick} />
       ) : (
         <Button
           isLoading={loading}
           colorScheme="blue"
-          rounded="full"
+          rounded="5"
           px={10}
           ml={5}
           onClick={handleClick}
+          size="sm"
         >
           Salvar
         </Button>

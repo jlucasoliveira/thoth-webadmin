@@ -38,16 +38,17 @@ function Search<T extends FieldValues>({ handleSearch, clearSearch, ...props }: 
             <InputGroup>
               <Input
                 {...fieldProps.field}
-                {...props}
+                size="sm"
                 isInvalid={fieldProps.fieldState.invalid}
                 errorBorderColor="blue.300"
-                rounded="full"
+                rounded="5"
                 borderStyle="solid"
                 borderWidth="1px"
                 borderColor="gray.390"
                 bgColor="gray.100"
+                {...props}
               />
-              <InputRightElement>
+              <InputRightElement h="full">
                 <IconButton
                   isDisabled={!fieldProps.fieldState.isDirty}
                   variant="unstyled"

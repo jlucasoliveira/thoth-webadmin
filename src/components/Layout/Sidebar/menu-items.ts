@@ -4,6 +4,7 @@ import { ReactComponent as PermissionIcon } from '@/assets/icons/sidebar/permiss
 import { ReactComponent as FornecedoresIcon } from '@/assets/icons/sidebar/fornecedor.svg';
 import { ReactComponent as LubrificanteIcon } from '@/assets/icons/sidebar/lubrificante.svg';
 import { ReactComponent as EstoqueIcon } from '@/assets/icons/sidebar/estoque.svg';
+import { ReactComponent as PlanIcon } from '@/assets/icons/sidebar/plano.svg';
 import { UserRoutes } from '@/features/users/routes/constants';
 import { ClientRoutes } from '@/features/clients/routes/constants';
 import { StockRoutes } from '@/features/stock/routes/constants';
@@ -27,7 +28,7 @@ export type Menu = {
 };
 
 export const options: Menu = {
-  title: 'Opções',
+  title: '',
   children: [
     {
       id: 'user-permissions',
@@ -74,7 +75,7 @@ export const options: Menu = {
     {
       id: 'orders',
       label: 'Compras',
-      icon: LubrificanteIcon,
+      icon: PlanIcon,
       to: OrderRoutes.List,
     },
   ],
