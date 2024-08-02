@@ -34,11 +34,12 @@ function PaymentList({ orderId }: Props) {
   if (!orderId) return null;
 
   return (
-    <Flex flexGrow={1}>
+    <Flex flexGrow={0.5} mb="2">
       {isLoading && isFetching ? (
         <Loading centerProps={{ flexGrow: 1 }} />
       ) : (
         <Table
+          forceScroll
           title="Pagamentos"
           columns={columns}
           data={data?.data ?? []}

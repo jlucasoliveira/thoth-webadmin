@@ -38,7 +38,7 @@ function ClientList() {
     []
   );
 
-  if (clients.isFetching || clients.isLoading) {
+  if (clients.isFetching && clients.isLoading) {
     return <Loading />;
   } else if (!clients.data) {
     return null;

@@ -46,7 +46,7 @@ function OrderList() {
     []
   );
 
-  if (orders.isFetching || orders.isLoading) {
+  if (orders.isFetching && orders.isLoading) {
     return <Loading />;
   } else if (!orders.data) {
     return null;
