@@ -1,15 +1,15 @@
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Flex } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Path, Resolver, useForm } from 'react-hook-form';
 import { FormProps } from '@/types/props';
-import { SubHeader } from '@/components/Layout';
 import { Form, Input } from '@/components/Form';
+import { DeleteButton } from '@/components/Helpers';
+import { SubHeader, ManageWrapper } from '@/components/Layout';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
+import { useDeleteClient } from '../api/deleteClient';
 import { ClientRoutes } from '../routes/constants';
 import { ClientModel } from '../types';
-import { DeleteClient } from './DeleteClient';
 import { FormType, schema, defaultValues } from './validation';
 
 function ClientManageForm({
@@ -48,11 +48,17 @@ function ClientManageForm({
   }, [data, setValue]);
 
   return (
-    <Flex direction="column" w="full" m={5}>
+    <ManageWrapper>
       <SubHeader
         {...props}
         loading={props.loading}
-        DeleteButton={(props) => <DeleteClient {...props} isDefault={data?.isDefault} />}
+        DeleteButton={() => (
+          <DeleteButton
+            id={props.id!}
+            useMutation={useDeleteClient}
+            buttonProps={{ isDisabled: data?.isDefault }}
+          />
+        )}
         onClick={handleSubmit(onSubmit)}
         goBack={() => navigate(ClientRoutes.List)}
         title={title}
@@ -70,7 +76,7 @@ function ClientManageForm({
           <Input isDisabled={!isFormEdit} control={control} name="phoneNumber" label="Telefone" />
         </FieldsContainer>
       </Form>
-    </Flex>
+    </ManageWrapper>
   );
 }
 
