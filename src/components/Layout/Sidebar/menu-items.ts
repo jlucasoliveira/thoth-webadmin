@@ -74,7 +74,7 @@ export const options: Menu = {
     },
     {
       id: 'orders',
-      label: 'Compras',
+      label: 'Vendas',
       icon: PlanIcon,
       to: OrderRoutes.List,
     },
