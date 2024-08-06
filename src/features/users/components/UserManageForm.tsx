@@ -1,17 +1,17 @@
-import { Flex } from '@chakra-ui/react';
 import { useEffect, useMemo } from 'react';
 import { Control, FormProvider, Path, Resolver, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UserModel } from '@/features/auth/types';
 import { Form } from '@/components/Form';
-import { SubHeader } from '@/components/Layout';
+import { SubHeader, ManageWrapper } from '@/components/Layout';
+import { DeleteButton } from '@/components/Helpers';
 import { FormProps } from '@/types/props';
+import { useDeleteUser } from '../api/deleteUser';
 import {
   SetPasswordForm,
   SetPasswordFormType,
   schema as setPasswordFormSchema,
 } from './Forms/SetPasswordForm';
-import { DeleteUser } from './DeleteUser';
 import { ChangePasswordForm } from './Forms/ChangePasswordForm';
 import { UserDataForm, UserDataFormType, schema as userDataFormSchema } from './Forms/UserDataForm';
 
@@ -65,14 +65,14 @@ function CreateUserForm({
   }, [methods, data]);
 
   return (
-    <Flex direction="column" w="full" m={5}>
+    <ManageWrapper>
       <SubHeader
         title="Usuários"
         id={id}
         isEdit={isEdit}
         loading={loading}
         onClick={handleSubmit(onSubmit)}
-        DeleteButton={DeleteUser}
+        DeleteButton={() => <DeleteButton id={id!} useMutation={useDeleteUser} />}
       />
       <FormProvider {...methods} handleSubmit={handleSubmit}>
         <Form loading={fetchingLoading}>
@@ -86,7 +86,7 @@ function CreateUserForm({
           )}
         </Form>
       </FormProvider>
-    </Flex>
+    </ManageWrapper>
   );
 }
 

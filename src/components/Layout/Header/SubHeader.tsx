@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Flex, Heading, IconButton } from '@chakra-ui/react';
+import { Button, ButtonProps, Flex, IconButton } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { ElementType, ReactNode, SyntheticEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -36,7 +36,7 @@ function SubHeader({
   isEditDisabled = false,
   hideDefaultActions = false,
   isHiddenSaveButton = false,
-  mb = 5,
+  mb = 1,
   goBack,
 }: SubHeader) {
   const navigate = useNavigate();
@@ -47,10 +47,7 @@ function SubHeader({
 
   return (
     <Flex direction="row" justifyContent="space-between" alignItems="center" w="full" mb={mb}>
-      <Heading color="gray.800" fontSize="20px" textTransform="capitalize">
-        <IconButton aria-label="Voltar" icon={<ArrowBackIcon />} variant="ghost" onClick={goBack} />
-        {title}
-      </Heading>
+      <IconButton aria-label="Voltar" size="sm" icon={<ArrowBackIcon />} onClick={goBack} />
       <Helmet>
         <title>{capitalize(title)}</title>
       </Helmet>
@@ -63,7 +60,7 @@ function SubHeader({
                 <DeleteButton id={id} />
               ) : null
             ) : (
-              <Button onClick={goBack} variant="link" isDisabled={loading}>
+              <Button onClick={goBack} variant="link" size="sm" isDisabled={loading}>
                 Cancelar
               </Button>
             )}
@@ -78,9 +75,10 @@ function SubHeader({
               )
             ) : (
               <Button
+                size="sm"
                 isLoading={loading}
                 colorScheme="blue"
-                rounded="full"
+                rounded="5"
                 isDisabled={isEditDisabled}
                 px={10}
                 ml={5}

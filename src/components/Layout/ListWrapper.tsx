@@ -81,7 +81,7 @@ function ListWrapper<T extends object>({
   );
 
   function onSubmit({ search }: FormType) {
-    if (searchBuilder) replaceFilter(searchBuilder(search));
+    if (searchBuilder) replaceFilter(searchBuilder(search), true);
     else addFilter(searchField as never, 'ilike', search);
   }
 
@@ -91,18 +91,18 @@ function ListWrapper<T extends object>({
   }
 
   return (
-    <Flex direction="column" w="full" m={5} overflowX="hidden" {...containerProps}>
+    <Flex direction="column" w="full" mx="2" my="1" overflowX="hidden" {...containerProps}>
       <Flex
         direction="row"
         justifyContent="space-between"
         w="full"
-        mb={tabs.length ? 0 : '16px'}
+        mb={tabs.length ? 0 : '2'}
         alignItems="center"
       >
         <Helmet>
           <title>{memoTitle}</title>
         </Helmet>
-        <Heading color="gray.800" fontSize="1.25rem">
+        <Heading color="gray.800" fontSize="1rem">
           {memoTitle}
         </Heading>
         <Flex direction="row" alignItems="center" gap={1}>
@@ -123,7 +123,8 @@ function ListWrapper<T extends object>({
           ) : registrationRoute ? (
             <Button
               colorScheme="blue"
-              rounded="full"
+              size="sm"
+              rounded="5"
               px={10}
               leftIcon={<AddIcon />}
               onClick={() => {

@@ -10,7 +10,7 @@ function MainLayout(props: PropsWithChildren<object>) {
   return (
     <Flex flex={1} direction="column" maxW="100vw">
       <Header isSmall={isSmallScreenSize} isOpen={isOpen} onToggle={onToggle} />
-      <Flex css="height: calc(100vh - 60px);" flex={1} direction="row" bgColor="gray.60">
+      <Flex css="height: calc(100vh - 60px);" flex={1} direction="row" bgColor="white">
         <SideBar isOpen={isOpen} isSmall={isSmallScreenSize} onClose={onClose} />
         {props.children}
       </Flex>

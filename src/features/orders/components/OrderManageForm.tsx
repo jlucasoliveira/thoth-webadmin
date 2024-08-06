@@ -7,7 +7,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Path, Resolver, useFieldArray, useForm } from 'react-hook-form';
 import { FormProps } from '@/types/props';
 import { Table } from '@/components/Elements';
-import { SubHeader } from '@/components/Layout';
+import { SubHeader, ManageWrapper } from '@/components/Layout';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { Checkbox, Form, Input, SearchableSelect } from '@/components/Form';
 import { useClients } from '@/features/clients/api/getClients';
@@ -136,7 +136,7 @@ function OrderManageForm({
   }, [totalPaid, setValue]);
 
   return (
-    <Flex direction="column" w="full" m={5}>
+    <ManageWrapper>
       <SubHeader
         {...props}
         loading={props.loading}
@@ -190,52 +190,50 @@ function OrderManageForm({
             label="Manter estoque"
           />
         </FieldsContainer>
-        <Flex gap={2}>
-          <Flex flexGrow={2} direction="column">
-            {props.id ? null : (
-              <FieldsContainer templateColumn={5} gridProps={{ alignItems: 'center' }}>
-                <SearchableSelect
-                  control={tempForm.control}
-                  label="Variação"
-                  name="variation"
-                  useFetch={useVariations}
-                  fetcherExtraParams={{
-                    include: { stock: true },
-                    filter: { stock: { quantity: { gt: 0 } } },
-                  }}
-                  searchBuilder={(ilike) => [
-                    { variation: { ilike } },
-                    { externalCode: { ilike } },
-                    { product: { name: { ilike } } },
-                  ]}
-                  getOptionLabel={(option) => {
-                    if (!option.variation) return option.product.name;
-                    return `${option.product.name} ${option.variation}`;
-                  }}
-                />
-                <Input
-                  control={tempForm.control}
-                  type="number"
-                  name="quantity"
-                  label="Quantidade"
-                  required
-                />
-                <Button colorScheme="blue" mb="5" onClick={tempForm.handleSubmit(onTemSubmit)}>
-                  Adicionar Produto
-                </Button>
-              </FieldsContainer>
-            )}
-            <Table
-              title={data?.id ? 'Itens comprados' : undefined}
-              data={fields}
-              columns={columns}
-              pages={1}
-            />
-          </Flex>
-          <PaymentList orderId={data?.id} />
+        <PaymentList orderId={data?.id} />
+        <Flex flexGrow={2} direction="column">
+          {props.id ? null : (
+            <FieldsContainer templateColumn={5} gridProps={{ alignItems: 'center' }}>
+              <SearchableSelect
+                control={tempForm.control}
+                label="Variação"
+                name="variation"
+                useFetch={useVariations}
+                fetcherExtraParams={{
+                  include: { stock: true },
+                  filter: { stock: { quantity: { gt: 0 } } },
+                }}
+                searchBuilder={(ilike) => [
+                  { variation: { ilike } },
+                  { externalCode: { ilike } },
+                  { product: { name: { ilike } } },
+                ]}
+                getOptionLabel={(option) => {
+                  if (!option.variation) return option.product.name;
+                  return `${option.product.name} ${option.variation}`;
+                }}
+              />
+              <Input
+                control={tempForm.control}
+                type="number"
+                name="quantity"
+                label="Quantidade"
+                required
+              />
+              <Button colorScheme="blue" mb="5" onClick={tempForm.handleSubmit(onTemSubmit)}>
+                Adicionar Produto
+              </Button>
+            </FieldsContainer>
+          )}
+          <Table
+            title={data?.id ? 'Itens comprados' : undefined}
+            data={fields}
+            columns={columns}
+            pages={1}
+          />
         </Flex>
       </Form>
-    </Flex>
+    </ManageWrapper>
   );
 }
 

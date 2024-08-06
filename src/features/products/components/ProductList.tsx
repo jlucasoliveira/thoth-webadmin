@@ -43,7 +43,7 @@ function ProductList() {
     []
   );
 
-  if (products.isFetching || products.isLoading) {
+  if (products.isFetching && products.isLoading) {
     return <Loading />;
   } else if (!products.data) {
     return null;

@@ -27,7 +27,7 @@ type Filters<T> = {
   setParams: SetURLSearchParams;
   addFilter: (key: keyof T, op: Operator, value: string | number) => void;
   removeFilter: (key: keyof T) => void;
-  replaceFilter: (filters: Filter<T>) => void;
+  replaceFilter: (filters: Filter<T>, keep?: boolean) => void;
   addOrder: (sort: Sort<T>) => void;
   removeOrder: (sort: Sort<T>) => void;
   handleOrder: (updater: Updater<SortingState>) => void;
@@ -49,7 +49,7 @@ function useFilters<T>(
   const [params, setParams] = useSearchParams();
 
   const buildKeyName = useCallback(
-    (param: string) => `${context}${context ? '_' : ''}${param}`,
+    (param: string) => `${context}${context ? '|' : ''}${param}`,
     [context]
   );
 
@@ -154,12 +154,12 @@ function useFilters<T>(
   );
 
   const replaceFilter = useCallback(
-    (filters: Filter<T>) => {
-      setParams(() => {
+    (filters: Filter<T>, keep = false) => {
+      setParams((oldParams) => {
         const parsed = qs.stringify({ [buildKey(SearchParamsKeys.FILTER)]: filters });
         const params = new URLSearchParams(parsed);
         params.set(buildKey(SearchParamsKeys.PAGE), '1');
-        return params;
+        return keep ? Object.fromEntries([...oldParams.entries(), ...params.entries()]) : params;
       });
     },
     [setParams, buildKey]

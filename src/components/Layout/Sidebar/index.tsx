@@ -36,14 +36,14 @@ function ListMenu({ isOpen = true }: Option) {
       direction="column"
       bg="white"
       overflowX="hidden"
-      px={isOpen ? '16px' : '2'}
+      px="2"
       borderRightStyle="solid"
       borderRightWidth="1px"
       borderRightColor="gray.450"
-      maxW="240px"
-      minW={isOpen ? '240px' : '20'}
+      maxW="200px"
+      minW={isOpen ? '200px' : '20px'}
       css={`
-        height: calc(100vh - 60px);
+        height: calc(100vh - 56px);
       `}
     >
       <Options isOpen={isOpen} />

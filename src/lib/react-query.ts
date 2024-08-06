@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import {
   QueryClient,
   UseQueryOptions,
@@ -6,6 +6,7 @@ import {
   UseMutationOptions,
   DefaultOptions,
   UseQueryResult,
+  UseMutationResult,
 } from '@tanstack/react-query';
 import { PromiseValue } from 'type-fest';
 import { Paginate, Pagination } from '@/types/pagination';
@@ -57,3 +58,11 @@ type UseFetchOptions<T, Args = any> = {
 export type UseFetch<T = object, Args = any> = (
   options: UseFetchOptions<T, Args> | any
 ) => UseQueryResult<Paginate<T>, unknown>;
+
+type MutationParams<T extends (...args: any) => any> = {
+  config?: MutationConfig<T>;
+};
+
+export type UseMutation<R, T extends (...args: any) => any> = (
+  params?: MutationParams<T>
+) => UseMutationResult<AxiosResponse, AxiosError, R>;

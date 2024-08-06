@@ -1,10 +1,9 @@
 import { useEffect, useMemo } from 'react';
-import { Flex } from '@chakra-ui/react';
 import { Resolver, useForm } from 'react-hook-form';
 import { InferType, number, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProps } from '@/types/props';
-import { SubHeader } from '@/components/Layout';
+import { SubHeader, ManageWrapper } from '@/components/Layout';
 import { Form, Input } from '@/components/Form';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { BrandModel } from '@/features/brands/types';
@@ -73,14 +72,12 @@ function StockManageForm({
   }, [setValue, stock]);
 
   return (
-    <Flex direction="column" w="full" m={5}>
+    <ManageWrapper>
       <SubHeader {...props} onClick={handleSubmit(onSubmit)} title="Estoque dos produtos" />
       <Form loading={props.fetchingLoading}>
-        <FieldsContainer title="Dados do produto" templateColumn="2fr 1.5fr">
+        <FieldsContainer title="Dados do produto">
           <Input isDisabled control={control} name="variation" label="Identificação" />
           <Input isDisabled control={control} name="brand" label="Fornecedor" />
-        </FieldsContainer>
-        <FieldsContainer templateColumn="1fr 1fr 1fr 1fr 1fr" columnsByRow={6}>
           <Input
             isDisabled={!isFormEdit}
             control={control}
@@ -101,7 +98,7 @@ function StockManageForm({
         <StockLaunchForm id={data?.id} control={control} isEdit={isFormEdit} />
         <StockEntriesList stockId={stock?.id} variationId={props.id} />
       </Form>
-    </Flex>
+    </ManageWrapper>
   );
 }
 

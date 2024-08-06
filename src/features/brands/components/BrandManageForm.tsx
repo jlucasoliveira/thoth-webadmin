@@ -1,19 +1,20 @@
 import { useEffect, useMemo } from 'react';
-import { Flex } from '@chakra-ui/react';
-import { InferType, object, string, number } from 'yup';
+import { InferType, object, string, number, boolean } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Path, Resolver, useForm } from 'react-hook-form';
-import { Form, Input } from '@/components/Form';
+import { DeleteButton } from '@/components/Helpers';
+import { Checkbox, Form, Input } from '@/components/Form';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
-import { SubHeader } from '@/components/Layout';
+import { SubHeader, ManageWrapper } from '@/components/Layout';
 import { FormProps } from '@/types/props';
+import { useDeleteBrand } from '../api/deleteBrand';
 import { BrandModel } from '../types';
-import { DeleteBrand } from './DeleteBrand';
 
 const schema = object().shape({
   id: string().optional(),
   name: string().required('Campo obrigatório'),
   profitRate: number().positive('Informe um valor válido').required('Campo obrigatório'),
+  isPublic: boolean().default(true),
 });
 
 export type FormType = InferType<typeof schema>;
@@ -22,6 +23,7 @@ const defaultValues: FormType = {
   id: '',
   name: '',
   profitRate: 30,
+  isPublic: true,
 };
 
 function BrandManageForm({
@@ -58,14 +60,14 @@ function BrandManageForm({
   }, [data, setValue]);
 
   return (
-    <Flex direction="column" w="full" m={5}>
+    <ManageWrapper>
       <SubHeader
         id={id}
         title={title}
         isEdit={isEdit}
         loading={loading}
         onClick={handleSubmit(onSubmit)}
-        DeleteButton={DeleteBrand}
+        DeleteButton={() => <DeleteButton id={id!} useMutation={useDeleteBrand} />}
       />
       <Form loading={fetchingLoading}>
         <FieldsContainer title="Dados da marca" templateColumn={3}>
@@ -80,9 +82,10 @@ function BrandManageForm({
             min="1"
             leftAddon="%"
           />
+          <Checkbox control={control} label="Público" name="isPublic" />
         </FieldsContainer>
       </Form>
-    </Flex>
+    </ManageWrapper>
   );
 }
 

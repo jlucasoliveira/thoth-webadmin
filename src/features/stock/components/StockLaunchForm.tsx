@@ -61,7 +61,18 @@ function StockLaunchForm({ control, id, isEdit, brand }: StockLaunchFormProps) {
   }
 
   return (
-    <FieldsContainer title="Inventário" templateColumn={3} gridProps={{ alignItems: 'center' }}>
+    <FieldsContainer
+      title="Inventário"
+      gridProps={{ alignItems: 'center' }}
+      style={{
+        borderRadius: 5,
+        borderColor: '--chakra-colors-whiteAlpha-50',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        padding: '5px',
+        margin: '-5px -1px 5px',
+      }}
+    >
       <Input
         isDisabled={!isEdit || isLoading}
         control={listControl}

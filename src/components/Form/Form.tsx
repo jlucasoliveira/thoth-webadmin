@@ -9,19 +9,7 @@ type Form = {
 
 const Form = forwardRef<any, PropsWithChildren<Form>>(({ children, loading, props }, ref) => {
   return (
-    <Flex
-      ref={ref}
-      bgColor="white"
-      flex={1}
-      p={5}
-      rounded={8}
-      borderWidth={1}
-      borderStyle="solid"
-      borderColor="gray.450"
-      direction="column"
-      overflowX="hidden"
-      {...props}
-    >
+    <Flex ref={ref} flex={1} p={2} rounded={2} direction="column" overflowX="hidden" {...props}>
       {loading ? <Loading /> : children}
     </Flex>
   );
