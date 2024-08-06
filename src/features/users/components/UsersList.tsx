@@ -39,7 +39,7 @@ function UsersList() {
     []
   );
 
-  if (users.isFetching || users.isLoading) {
+  if (users.isFetching && users.isLoading) {
     return <Loading />;
   } else if (!users.data) {
     return null;

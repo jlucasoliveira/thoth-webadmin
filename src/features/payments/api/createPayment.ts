@@ -5,9 +5,10 @@ import { useNotificationStore } from '@/stores/notifications';
 import { PaymentModel } from '../types';
 
 export type Payload = {
-  value: number;
   orderId?: string;
+  value: number;
   clientId: string;
+  accountId: number;
 };
 
 async function createPayment(payload: Payload) {

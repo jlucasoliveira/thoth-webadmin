@@ -5,7 +5,7 @@ import { OrderRoutes } from './constants';
 function Orders() {
   return (
     <ListWrapper
-      title="Compras"
+      title="Vendas"
       searchField="client.name"
       registrationRoute={OrderRoutes.Registration}
       List={OrderList}

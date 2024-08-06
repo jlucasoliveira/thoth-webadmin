@@ -49,7 +49,7 @@ function OrderManageForm({
   }, [props, fetchingLoading]);
 
   const title = useMemo<string>(() => {
-    const currentTitle = 'compra';
+    const currentTitle = 'venda';
     if (props.isEdit) return `Editar ${currentTitle}`;
     if (!props.id) return `Nova ${currentTitle}`;
     return currentTitle;
