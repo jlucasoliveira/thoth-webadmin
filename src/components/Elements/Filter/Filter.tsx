@@ -37,7 +37,7 @@ function Filter<T extends object>(props: Filter<T>) {
     (key: NestedKeyOf<T>, op: Operator, value: string | string[]) => {
       const props = value === 'all' ? {} : buildObject(key, { [op]: value });
 
-      replaceFilter(props as unknown as PaginationFilter<T>);
+      replaceFilter(props as unknown as PaginationFilter<T>, true);
     },
     [replaceFilter]
   );

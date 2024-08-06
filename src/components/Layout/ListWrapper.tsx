@@ -81,7 +81,7 @@ function ListWrapper<T extends object>({
   );
 
   function onSubmit({ search }: FormType) {
-    if (searchBuilder) replaceFilter(searchBuilder(search));
+    if (searchBuilder) replaceFilter(searchBuilder(search), true);
     else addFilter(searchField as never, 'ilike', search);
   }
 
