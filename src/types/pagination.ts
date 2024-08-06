@@ -1,4 +1,4 @@
-import { BaseEntity } from './common';
+import { BaseEntity, BaseEntityInt } from './common';
 
 type DescOrder<T = object> = {
   [key in keyof T as `-${key & string}`]: T[key];
@@ -25,7 +25,7 @@ export type Filter<T> = FilterOperator<T> | Array<FilterOperator<T>>;
 export type Flatten<T> = T extends any[] ? T[number] : T;
 
 type Include<T> = {
-  [key in keyof T]?: Flatten<T[key]> extends BaseEntity
+  [key in keyof T]?: Flatten<T[key]> extends BaseEntity | BaseEntityInt
     ? boolean | Include<Flatten<T[key]>>
     : undefined;
 };

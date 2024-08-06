@@ -25,7 +25,7 @@ export type BaseEntity = {
   deletedAt: string;
 };
 
-export type BaseEntityInt = BaseEntity & {
+export type BaseEntityInt = Omit<BaseEntity, 'id'> & {
   id: number;
 };
 
