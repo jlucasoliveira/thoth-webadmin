@@ -1,4 +1,5 @@
 import { UserModel } from '@/features/auth/types';
+import { BankAccountModel } from '@/features/bankAccounts/types';
 import { ClientModel } from '@/features/clients/types';
 import { ProductVariationModel } from '@/features/products/types';
 import { BaseEntity } from '@/types/common';
@@ -52,10 +53,12 @@ export const defaultValues: FormType = {
 
 export const paymentSchema = object().shape({
   value: number().positive('Informe um valor positivo').typeError('Informe um número válido'),
+  account: mixed<BankAccountModel>().required('Informe uma conta bancária'),
 });
 
 export type PaymentFormType = InferType<typeof paymentSchema>;
 
 export const paymentDefaultValues: PaymentFormType = {
   value: 0,
+  account: { id: -1 } as BankAccountModel,
 };
