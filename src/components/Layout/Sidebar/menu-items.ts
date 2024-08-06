@@ -11,6 +11,7 @@ import { StockRoutes } from '@/features/stock/routes/constants';
 import { ProductRoutes } from '@/features/products/routes/constants';
 import { BrandsRoutes } from '@/features/brands/routes/constants';
 import { CategoriesRoutes } from '@/features/categories/routes/constants';
+import { BankAccountsRoutes } from '@/features/bankAccounts/routes/constants';
 import { OrderRoutes } from '@/features/orders/routes/constants';
 
 type _Children = {
@@ -47,6 +48,12 @@ export const options: Menu = {
       label: 'Clientes',
       icon: ClientIcon,
       to: ClientRoutes.List,
+    },
+    {
+      id: 'accounts',
+      label: 'Contas bancárias',
+      icon: ClientIcon,
+      to: BankAccountsRoutes.List,
     },
     {
       id: 'brands',
