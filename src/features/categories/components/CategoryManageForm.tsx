@@ -50,7 +50,7 @@ function CategoryManageForm({
   useEffect(() => {
     if (data) {
       Object.entries(data).forEach(([key, value]) => {
-        setValue(key as Path<FormType>, value);
+        setValue(key as Path<FormType>, value.toString());
       });
     }
   }, [data, setValue]);
