@@ -33,7 +33,7 @@ function useCreateProduct({ config }: UseCreateProduct = {}) {
         title: 'Sucesso!',
         message: 'Produto criado.',
       });
-      navigate(generatePath(ProductRoutes.Edit, { id }));
+      navigate(generatePath(ProductRoutes.Edit, { id: id.toString() }));
     },
   });
 }
