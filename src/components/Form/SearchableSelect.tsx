@@ -71,13 +71,13 @@ function SearchableSelect<
     field: { value },
   } = useController({ control, name });
   const [search, setSearch] = useState<string | undefined>(undefined);
-  const deboundSearch = useDebounce(search, 300);
+  const debouncedSearch = useDebounce(search, 300);
 
   const filters = useMemo(() => {
-    if (!deboundSearch) return {} as Filter<F>;
-    if (searchBuilder) return searchBuilder(deboundSearch);
-    return { [searchField]: { ilike: deboundSearch } };
-  }, [deboundSearch, searchField, searchBuilder]);
+    if (!debouncedSearch) return {} as Filter<F>;
+    if (searchBuilder) return searchBuilder(debouncedSearch);
+    return { [searchField]: { ilike: debouncedSearch } };
+  }, [debouncedSearch, searchField, searchBuilder]);
 
   const fetched = useFetch({
     params: {
