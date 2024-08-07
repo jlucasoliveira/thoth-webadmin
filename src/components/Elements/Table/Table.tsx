@@ -106,7 +106,7 @@ function Table<T>(props: TableProps<T>) {
           overflowY={props.forceScroll ? undefined : 'hidden'}
           __css={props.forceScroll ? { '-webkit-scrollbar': { display: 'none' } } : undefined}
         >
-          <ChakraTable size="sm">
+          <ChakraTable size="sm" variant="striped">
             <Thead
               borderBottomColor="gray.460"
               borderBottomWidth={2}
