@@ -11,6 +11,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
@@ -66,6 +67,7 @@ function ListWrapper<T extends object>({
   tabs = [],
   searchBuilder,
 }: ListWrapper<T>) {
+  const [isSmallScreenSize] = useMediaQuery('(max-width: 1100px)');
   const navigate = useNavigate();
   const { currentTab, addFilter, changeTab, replaceFilter, removeFilter } = useFilters();
   const { control, handleSubmit, reset } = useForm<FormType>({
@@ -91,21 +93,29 @@ function ListWrapper<T extends object>({
   }
 
   return (
-    <Flex direction="column" w="full" mx="2" my="1" overflowX="hidden" {...containerProps}>
+    <Flex
+      direction="column"
+      w="full"
+      mx={isSmallScreenSize ? undefined : '2'}
+      my="1"
+      overflowX="hidden"
+      {...containerProps}
+    >
       <Flex
-        direction="row"
+        direction={isSmallScreenSize ? 'column' : 'row'}
         justifyContent="space-between"
         w="full"
         mb={tabs.length ? 0 : '2'}
-        alignItems="center"
+        alignItems={isSmallScreenSize ? undefined : 'center'}
+        px={isSmallScreenSize ? 2 : undefined}
       >
         <Helmet>
           <title>{memoTitle}</title>
         </Helmet>
-        <Heading color="gray.800" fontSize="1rem">
+        <Heading color="gray.800" fontSize="1rem" mb={isSmallScreenSize ? 1 : undefined}>
           {memoTitle}
         </Heading>
-        <Flex direction="row" alignItems="center" gap={1}>
+        <Flex direction="row" alignItems="center" gap={isSmallScreenSize ? 3 : 1}>
           <Search
             control={control}
             name="search"
