@@ -6,7 +6,6 @@ import {
   FieldPathValue,
   FieldValues,
   Path,
-  PathValue,
   useController,
 } from 'react-hook-form';
 import { useTheme } from '@chakra-ui/react';
@@ -131,12 +130,10 @@ function SearchableSelect<
 
   const handleChange = useCallback(
     (onChange: OnChange<T>, value: any, action: ActionMeta<F>) => {
-      // TODO: Handle other actions
       if (action.action === 'select-option') {
         onChange(value);
         if (search) setSearch(undefined);
       }
-      if (action.action === 'clear') onChange({ value: '', label: '' } as PathValue<T, Path<T>>);
     },
     [search]
   );
@@ -165,7 +162,6 @@ function SearchableSelect<
             ...props.styles,
           }}
           isSearchable
-          isClearable
           {...props}
           {...field}
           isMulti={isMulti}

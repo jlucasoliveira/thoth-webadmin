@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import { Button, Flex, IconButton } from '@chakra-ui/react';
+import { useEffect, useMemo } from 'react';
+import { Flex, IconButton } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,19 +12,12 @@ import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { Checkbox, Form, Input, SearchableSelect } from '@/components/Form';
 import { useClients } from '@/features/clients/api/getClients';
 import { PaymentList } from '@/features/payments/components/PaymentList';
-import { useVariations } from '@/features/products/api/variations/getVariations';
 import { currencyFormat } from '@/utils/format';
 import { OrderRoutes } from '../routes/constants';
 import { OrderModel } from '../types';
 import { PaymentModal } from './PaymentModel';
-import {
-  FormType,
-  FormItemType,
-  FormTempType,
-  defaultValues,
-  schema,
-  tempVariationSchema,
-} from './validations';
+import { OrderItemPurchase } from './OrderItemPurchase';
+import { FormType, FormItemType, defaultValues, schema } from './validations';
 
 function OrderManageForm({
   onSubmit,
@@ -33,10 +26,7 @@ function OrderManageForm({
   ...props
 }: FormProps<FormType, OrderModel>) {
   const navigate = useNavigate();
-  const { reset, setError, clearErrors, ...tempForm } = useForm<FormTempType>({
-    defaultValues: { quantity: 1 },
-    resolver: yupResolver(tempVariationSchema),
-  });
+
   const { control, handleSubmit, setValue } = useForm<FormType>({
     defaultValues,
     resolver: yupResolver(schema) as Resolver<FormType>,
@@ -90,26 +80,6 @@ function OrderManageForm({
   const totalPaid = useMemo(
     () => fields.reduce((acc, field) => acc + (field.total ?? 1), 0),
     [fields]
-  );
-
-  const onTemSubmit = useCallback(
-    ({ quantity, variation }: FormTempType) => {
-      if (variation) {
-        console.log(variation.stock.quantity, quantity);
-        if (variation.stock.quantity < quantity) {
-          setError('quantity', {
-            message: 'Quantidade excede o encontrado em estoque',
-            type: 'max',
-          });
-        } else {
-          clearErrors('quantity');
-          const price = variation.price ?? 0;
-          append({ quantity, variation, price, total: price * quantity });
-          reset();
-        }
-      }
-    },
-    [append, clearErrors, reset, setError]
   );
 
   useEffect(() => {
@@ -192,39 +162,7 @@ function OrderManageForm({
         </FieldsContainer>
         <PaymentList orderId={data?.id} />
         <Flex flexGrow={2} direction="column">
-          {props.id ? null : (
-            <FieldsContainer templateColumn={5} gridProps={{ alignItems: 'center' }}>
-              <SearchableSelect
-                control={tempForm.control}
-                label="Variação"
-                name="variation"
-                useFetch={useVariations}
-                fetcherExtraParams={{
-                  include: { stock: true },
-                  filter: { stock: { quantity: { gt: 0 } } },
-                }}
-                searchBuilder={(ilike) => [
-                  { variation: { ilike } },
-                  { externalCode: { ilike } },
-                  { product: { name: { ilike } } },
-                ]}
-                getOptionLabel={(option) => {
-                  if (!option.variation) return option.product.name;
-                  return `${option.product.name} ${option.variation}`;
-                }}
-              />
-              <Input
-                control={tempForm.control}
-                type="number"
-                name="quantity"
-                label="Quantidade"
-                required
-              />
-              <Button colorScheme="blue" mb="5" onClick={tempForm.handleSubmit(onTemSubmit)}>
-                Adicionar Produto
-              </Button>
-            </FieldsContainer>
-          )}
+          {props.id ? null : <OrderItemPurchase append={append} />}
           <Table
             title={data?.id ? 'Itens comprados' : undefined}
             data={fields}

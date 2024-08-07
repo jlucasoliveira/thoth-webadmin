@@ -14,7 +14,7 @@ const itemSchema = object().shape({
   price: number(),
   quantity: number()
     .typeError('Informe um número válido')
-    .positive('Informe um número posito')
+    .positive('Informe um número positivo')
     .default(1),
   variation: mixed<Omit<Variation, 'product' | 'stock'>>().required(
     'Insira uma variação corretamente'
@@ -35,9 +35,13 @@ export const schema = object().shape({
 
 export const tempVariationSchema = object().shape({
   variation: mixed<Variation>(),
+  price: number()
+    .typeError('Informe um número válido')
+    .positive('Informe um número positivo')
+    .default(1),
   quantity: number()
     .typeError('Informe um número válido')
-    .positive('Informe um número posito')
+    .positive('Informe um número positivo')
     .default(1),
 });
 
