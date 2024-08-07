@@ -63,7 +63,6 @@ function OrderItemPurchase({ append }: Props) {
           { product: { name: { ilike } } },
         ]}
         getOptionLabel={(option) => {
-          console.log(option);
           if (!option.variation) return option.product.name;
           return `${option.product.name} ${option.variation}`;
         }}
