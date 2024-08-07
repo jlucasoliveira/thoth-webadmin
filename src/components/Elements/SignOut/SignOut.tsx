@@ -5,7 +5,11 @@ import { AuthRoutes } from '@/features/auth/routes/constants';
 import { useUserStore } from '@/stores/user';
 import { storage } from '@/utils/storage';
 
-function SignOut(props: ButtonProps) {
+type Props = {
+  isSmall?: boolean;
+};
+
+function SignOut({ isSmall, ...props }: ButtonProps & Props) {
   const { removeToken, removeUserData } = useUserStore();
   const { addNotification } = useNotificationStore();
   const navigate = useNavigate();
@@ -23,7 +27,7 @@ function SignOut(props: ButtonProps) {
 
   return (
     <Button mr={5} rounded="full" colorScheme="blackAlpha" {...props} onClick={handleLogOut}>
-      Sair
+      {isSmall ? null : 'Sair'}
     </Button>
   );
 }

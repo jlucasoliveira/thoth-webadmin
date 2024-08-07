@@ -28,11 +28,11 @@ function Header({ isOpen = true, isSmall = false, onToggle }: Header) {
       borderBottomWidth="1px"
       borderBottomStyle="solid"
       borderBottomColor="gray.450"
+      px="4"
     >
       {isSmall ? (
         <Center>
           <IconButton
-            ml={8}
             aria-label="Abrir menu"
             colorScheme="blue"
             icon={<HamburgerIcon color="white" width="16px" height="16px" />}
@@ -43,10 +43,11 @@ function Header({ isOpen = true, isSmall = false, onToggle }: Header) {
           />
         </Center>
       ) : null}
-      <Center aria-label="Logo do Cabeçalho" my="5px">
-        <Logo height={45} width={200} aria-label="Thoth Logo" />
+      <Center flex={isSmall ? 1 : undefined} aria-label="Logo do Cabeçalho" my="5px">
+        <Logo height={45} width="inherit" aria-label="Thoth Logo" />
         {isSmall ? null : (
           <IconButton
+            ml="2"
             aria-label="Fechar menu"
             rounded="full"
             bg="white"
@@ -62,9 +63,8 @@ function Header({ isOpen = true, isSmall = false, onToggle }: Header) {
         )}
       </Center>
       <Center aria-label="menu">
-        <SignOut size="sm" colorScheme="blue" rightIcon={<SignOutIcon />} />
+        <SignOut isSmall={isSmall} size="sm" colorScheme="blue" rightIcon={<SignOutIcon />} />
         <Button
-          mr={8}
           aria-label="Perfil"
           as={Link}
           to="/profile"
