@@ -80,10 +80,10 @@ function SearchableSelect<
 
   const fetched = useFetch({
     params: {
+      ...fetcherExtraParams,
       filter: { ...filters, ...fetcherFilters, ...fetcherExtraParams?.filter } as Filter<F>,
       pageNumber: 1,
       skip: 0,
-      ...fetcherExtraParams,
     },
     config: { enabled: forceFetch || refetch === undefined },
   });
