@@ -10,7 +10,7 @@ const filters: Option<ProductVariationModel>[] = [
     label: 'Estoque',
     operator: 'gte',
     type: 'radio',
-    defaultValue: '1:number' as string,
+    defaultValue: '0:number' as const,
     values: [
       { label: 'Apenas com estoque', value: '1:number' },
       { label: 'Todos os produtos', value: '0:number' },
