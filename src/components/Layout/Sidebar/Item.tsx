@@ -29,7 +29,7 @@ type ItemWrapper = CommonProps & {
 function ItemWrapper(props: ItemWrapper) {
   const customProps: TextProps & LinkProps = {
     fontWeight: 600,
-    fontSize: 12,
+    fontSize: '0.75rem',
     fontFamily: 'Open Sans',
     color: props.isActive ? 'white' : 'other.semiBlack',
     opacity: props.isDisabled ? 0.7 : 1,

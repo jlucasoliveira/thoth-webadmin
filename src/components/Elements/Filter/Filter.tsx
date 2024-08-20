@@ -43,7 +43,7 @@ function Filter<T extends object>(props: Filter<T>) {
 
   return (
     <Menu>
-      <MenuButton as={Button} colorScheme="blue" variant="outline" size="sm" pl="1">
+      <MenuButton as={Button} colorScheme="blue" rounded="5" fontSize="1rem" size="sm" pl={1}>
         Filtrar
       </MenuButton>
       <MenuList zIndex={3}>

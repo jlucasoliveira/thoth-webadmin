@@ -101,7 +101,7 @@ function Table<T>(props: TableProps<T>) {
           justifyContent="space-between"
           flex={1}
           position="relative"
-          roundedTop={8}
+          roundedTop={4}
           flexGrow={1}
           overflowY={props.forceScroll ? undefined : 'hidden'}
           __css={props.forceScroll ? { '-webkit-scrollbar': { display: 'none' } } : undefined}
@@ -121,7 +121,7 @@ function Table<T>(props: TableProps<T>) {
                     <Th
                       key={header.id}
                       color="gray.460"
-                      fontSize="0.75rem"
+                      fontSize="0.8rem"
                       position="relative"
                       colSpan={header.colSpan}
                       textTransform="capitalize"
@@ -150,7 +150,7 @@ function Table<T>(props: TableProps<T>) {
                     <Td
                       key={cell.id}
                       color="gray.560"
-                      fontSize="0.75rem"
+                      fontSize="0.85rem"
                       css={{ a: { textTransform: 'none' } }}
                     >
                       {flexRender(renderCell, cell.getContext())}
