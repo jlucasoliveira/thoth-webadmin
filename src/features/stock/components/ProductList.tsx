@@ -13,7 +13,6 @@ function ProductList() {
   const variations = useVariations({
     params: {
       ...query,
-      filter: { stock: { quantity: { gt: 0 } }, ...query.filter },
       include: { stock: true },
     },
   });

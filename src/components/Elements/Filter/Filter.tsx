@@ -1,5 +1,5 @@
 import {
-  IconButton,
+  Button,
   Menu,
   MenuButton,
   MenuItemOption,
@@ -7,7 +7,6 @@ import {
   MenuOptionGroup,
 } from '@chakra-ui/react';
 import { useFilters } from '@/hooks/useFilters';
-import { ReactComponent as FilterIcon } from '@/assets/icons/navigation/filter.svg';
 import { useCallback } from 'react';
 import { Operator, Filter as PaginationFilter } from '@/types/pagination';
 import { buildObject, NestedKeyOf } from '@/utils/helpers';
@@ -43,18 +42,10 @@ function Filter<T extends object>(props: Filter<T>) {
   );
 
   return (
-    <Menu closeOnSelect={false}>
-      <MenuButton
-        as={IconButton}
-        icon={<FilterIcon />}
-        colorScheme="whiteAlpha"
-        rounded="full"
-        mx={1}
-        borderStyle="solid"
-        borderWidth="1px"
-        borderColor="gray.390"
-        size="sm"
-      />
+    <Menu>
+      <MenuButton as={Button} colorScheme="blue" variant="outline" size="sm" pl="1">
+        Filtrar
+      </MenuButton>
       <MenuList zIndex={3}>
         {props.options.map((group) => (
           <MenuOptionGroup
