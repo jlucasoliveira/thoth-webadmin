@@ -43,9 +43,9 @@ function Filter<T extends object>(props: Filter<T>) {
 
   return (
     <Menu>
-      <MenuButton as={Button} colorScheme="blue" rounded="5" fontSize="1rem" size="sm" pl={1}>
-        Filtrar
-      </MenuButton>
+      <Button colorScheme="blue" rounded="5" fontSize="1rem" size="sm" px="5">
+        <MenuButton fontWeight="semibold">Filtrar</MenuButton>
+      </Button>
       <MenuList zIndex={3}>
         {props.options.map((group) => (
           <MenuOptionGroup
