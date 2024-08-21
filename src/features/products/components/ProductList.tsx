@@ -4,10 +4,10 @@ import { generatePath } from 'react-router-dom';
 import { Loading, Table } from '@/components/Elements';
 import { useFilters } from '@/hooks/useFilters';
 import { Actions, generateDefaultActions } from '@/components/Elements/Table';
+import { dateTimeFormat } from '@/utils/format';
 import { ProductRoutes } from '../routes/constants';
 import { useProducts } from '../api/getProducts';
 import { ProductModel } from '../types';
-import { dateFormat } from '@/utils/format';
 
 function ProductList() {
   const { query } = useFilters();
@@ -20,7 +20,7 @@ function ProductList() {
       {
         id: 'createdAt',
         header: 'Data de criação',
-        accessorFn: (row) => dateFormat(row.createdAt),
+        accessorFn: (row) => dateTimeFormat(row.createdAt),
       },
       {
         header: 'Ações',

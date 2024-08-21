@@ -5,9 +5,9 @@ import { Loading, Table } from '@/components/Elements';
 import { Actions, generateDefaultActions } from '@/components/Elements/Table';
 import { BankAccountModel } from '@/features/bankAccounts/types';
 import { useFilters } from '@/hooks/useFilters';
+import { dateTimeFormat } from '@/utils/format';
 import { useBankAccounts } from '../api/getAccounts';
 import { BankAccountsRoutes } from '../routes/constants';
-import { dateFormat } from '@/utils/format';
 
 function BankAccountsList() {
   const { query } = useFilters();
@@ -22,7 +22,7 @@ function BankAccountsList() {
       { header: 'Agência', accessorKey: 'agency' },
       { header: 'Número da conta', accessorKey: 'accountNumber' },
       { header: 'Titular', accessorFn: (row) => row.owner?.name ?? '-', enableSorting: false },
-      { header: 'Data de criação', accessorFn: (row) => dateFormat(row.createdAt) },
+      { header: 'Data de criação', accessorFn: (row) => dateTimeFormat(row.createdAt) },
       {
         header: 'Ações',
         accessorKey: 'id',

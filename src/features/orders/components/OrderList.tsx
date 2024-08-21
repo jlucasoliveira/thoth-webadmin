@@ -4,10 +4,10 @@ import { generatePath } from 'react-router-dom';
 import { Loading, Table } from '@/components/Elements';
 import { useFilters } from '@/hooks/useFilters';
 import { Actions, generateDefaultActions } from '@/components/Elements/Table';
+import { currencyFormat, dateTimeFormat } from '@/utils/format';
 import { OrderRoutes } from '../routes/constants';
 import { useOrders } from '../api/getOrders';
 import { OrderModel } from '../types';
-import { currencyFormat, dateFormat } from '@/utils/format';
 
 function OrderList() {
   const { query } = useFilters();
@@ -24,7 +24,7 @@ function OrderList() {
       },
       { header: 'Pago', accessorFn: (row) => (row.paid ? 'Sim' : 'Não'), enableSorting: false },
       { header: 'Vendedor', accessorKey: 'seller.name', enableSorting: false },
-      { id: 'createdAt', header: 'Data', accessorFn: (row) => dateFormat(row.createdAt) },
+      { id: 'createdAt', header: 'Data', accessorFn: (row) => dateTimeFormat(row.createdAt) },
       {
         header: 'Ações',
         accessorKey: 'id',
