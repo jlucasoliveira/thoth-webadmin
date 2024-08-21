@@ -33,6 +33,7 @@ function Products() {
       List={ProductList}
       searchBuilder={searchBuilder}
       registrationRoute={StockRoutes.Registration}
+      addButtonText="Adição em massa"
     />
   );
 }
