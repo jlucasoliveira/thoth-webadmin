@@ -49,9 +49,16 @@ export function currencyFormat(value?: number | null) {
   }).format(value);
 }
 
-export function dateFormat(value: string | Date | number | null): string {
+export function dateTimeFormat(value: string | Date | number | null): string {
   if (value === null) return '-';
   if (typeof value === 'string') value = new Date(value);
 
   return new Intl.DateTimeFormat('pt-br', { dateStyle: 'short', timeStyle: 'short' }).format(value);
+}
+
+export function dateFormat(value: string | Date | number | null): string {
+  if (value === null) return '-';
+  if (typeof value === 'string') value = new Date(value);
+
+  return new Intl.DateTimeFormat('pt-br', { dateStyle: 'short' }).format(value);
 }

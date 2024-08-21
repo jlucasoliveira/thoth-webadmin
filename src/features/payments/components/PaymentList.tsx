@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Loading, Table } from '@/components/Elements';
 import { useFilters } from '@/hooks/useFilters';
-import { currencyFormat, dateFormat } from '@/utils/format';
+import { currencyFormat, dateTimeFormat } from '@/utils/format';
 import { usePayments } from '../api/getPayments';
 import { PaymentModel } from '../types';
 
@@ -12,7 +12,11 @@ const columns: ColumnDef<PaymentModel>[] = [
   { header: 'Emissor', accessorKey: 'issuer.name', enableSorting: false },
   { header: 'Valor', accessorFn: (row) => currencyFormat(row.value), enableSorting: false },
   { header: 'Conta', accessorKey: 'bankAccount.name', enableSorting: false },
-  { header: 'Data de pagamento', accessorFn: (row) => dateFormat(row.paidDate), id: 'createdAt' },
+  {
+    header: 'Data de pagamento',
+    accessorFn: (row) => dateTimeFormat(row.paidDate),
+    id: 'createdAt',
+  },
 ];
 
 type Props = {
