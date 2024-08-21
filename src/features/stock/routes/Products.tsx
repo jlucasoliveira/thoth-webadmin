@@ -3,6 +3,7 @@ import { Option } from '@/components/Elements';
 import { ProductVariationModel } from '@/features/products/types';
 import { Filter } from '@/types/pagination';
 import { ProductList } from '../components/ProductList';
+import { StockRoutes } from './constants';
 
 const filters: Option<ProductVariationModel>[] = [
   {
@@ -29,8 +30,9 @@ function Products() {
     <ListWrapper
       title="Estoque"
       filters={filters}
-      searchBuilder={searchBuilder}
       List={ProductList}
+      searchBuilder={searchBuilder}
+      registrationRoute={StockRoutes.Registration}
     />
   );
 }
