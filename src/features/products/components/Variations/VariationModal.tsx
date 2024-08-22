@@ -19,7 +19,7 @@ import { useAttachments } from '@/features/attachments/api/getAttachments';
 import { useFilters } from '@/hooks/useFilters';
 import { FormProps } from '@/types/props';
 import { useGetProductVariation } from '../../api/variations/getVariation';
-import { ProductVariationModel } from '../../types';
+import { Gender, ProductVariationModel } from '../../types';
 import { VARIATION_ID } from '../../utils/params';
 import { VariationForm, variationSchema } from '../Forms/validation';
 import { ImagesForm } from '../Forms/ImagesForm';
@@ -29,6 +29,7 @@ const defaultValues: VariationForm = {
   variation: '',
   price: 0,
   quantity: 0,
+  gender: Gender.None,
 };
 
 export type FormPayload = {
@@ -62,12 +63,21 @@ function VariationModal(props: VariationModalProps) {
   );
   const genderOptions = useMemo(generateGenderOption, []);
 
-  const { handleSubmit, control, setValue } = useForm<VariationForm>({
+  const { control, handleSubmit, reset, setValue } = useForm<VariationForm>({
     defaultValues,
     resolver: yupResolver(variationSchema) as Resolver<VariationForm>,
   });
 
   const { replace } = useFieldArray({ control, name: 'images' });
+
+  async function onSubmit(form: VariationForm) {
+    try {
+      await props.onSubmit({ form, variation: data });
+      reset();
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
     if (data) {
@@ -110,7 +120,7 @@ function VariationModal(props: VariationModalProps) {
                 isLoading={props.isLoading}
                 isDisabled={loading || !props.isEdit}
                 colorScheme="blue"
-                onClick={handleSubmit((form) => props.onSubmit({ form, variation: data }))}
+                onClick={handleSubmit(onSubmit)}
               >
                 Salvar
               </Button>
