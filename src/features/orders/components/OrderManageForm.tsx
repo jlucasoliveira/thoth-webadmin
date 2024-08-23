@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Flex, IconButton } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ColumnDef } from '@tanstack/react-table';
 import { Path, Resolver, useFieldArray, useForm } from 'react-hook-form';
@@ -13,7 +12,6 @@ import { Checkbox, Form, Input, SearchableSelect } from '@/components/Form';
 import { useClients } from '@/features/clients/api/getClients';
 import { PaymentList } from '@/features/payments/components/PaymentList';
 import { currencyFormat } from '@/utils/format';
-import { OrderRoutes } from '../routes/constants';
 import { OrderModel } from '../types';
 import { PaymentModal } from './PaymentModel';
 import { OrderItemPurchase } from './OrderItemPurchase';
@@ -25,8 +23,6 @@ function OrderManageForm({
   fetchingLoading,
   ...props
 }: FormProps<FormType, OrderModel>) {
-  const navigate = useNavigate();
-
   const { control, handleSubmit, setValue } = useForm<FormType>({
     defaultValues,
     resolver: yupResolver(schema) as Resolver<FormType>,
@@ -112,7 +108,6 @@ function OrderManageForm({
         loading={props.loading}
         DeleteButton={() => null}
         onClick={handleSubmit(onSubmit)}
-        goBack={() => navigate(OrderRoutes.List)}
         title={title}
         rightActions={<PaymentModal data={data} />}
       />

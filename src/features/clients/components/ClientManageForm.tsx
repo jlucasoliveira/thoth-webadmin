@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Path, Resolver, useForm } from 'react-hook-form';
 import { FormProps } from '@/types/props';
@@ -8,7 +7,6 @@ import { DeleteButton } from '@/components/Helpers';
 import { SubHeader, ManageWrapper } from '@/components/Layout';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { useDeleteClient } from '../api/deleteClient';
-import { ClientRoutes } from '../routes/constants';
 import { ClientModel } from '../types';
 import { FormType, schema, defaultValues } from './validation';
 
@@ -18,7 +16,6 @@ function ClientManageForm({
   fetchingLoading,
   ...props
 }: FormProps<FormType, ClientModel>) {
-  const navigate = useNavigate();
   const { control, handleSubmit, setValue } = useForm<FormType>({
     context: { isNewEntry: !props.id },
     defaultValues,
@@ -60,7 +57,6 @@ function ClientManageForm({
           />
         )}
         onClick={handleSubmit(onSubmit)}
-        goBack={() => navigate(ClientRoutes.List)}
         title={title}
       />
       <Form loading={fetchingLoading}>
