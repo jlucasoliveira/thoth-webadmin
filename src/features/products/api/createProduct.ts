@@ -7,7 +7,7 @@ import { BaseEntity } from '@/types/common';
 import { ProductRoutes } from '../routes/constants';
 import { ProductModel } from '../types';
 
-export type Payload = Omit<ProductModel, keyof BaseEntity | 'brand'>;
+export type Payload = Omit<ProductModel, keyof BaseEntity | 'brand' | 'variations'>;
 
 async function createProduct(payload: Payload) {
   const { data } = await axios.post<ProductModel>(`/products`, payload);

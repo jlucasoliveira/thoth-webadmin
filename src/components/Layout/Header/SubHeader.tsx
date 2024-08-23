@@ -6,9 +6,9 @@ import { Helmet } from 'react-helmet';
 import { capitalize } from '@/utils/format';
 import { SaveDialog } from './SaveDialog';
 
-type SubHeader = {
+type SubHeader<T = string> = {
   onClick: (e?: SyntheticEvent) => void;
-  id?: string;
+  id?: T;
   isEdit?: boolean;
   DeleteButton?: ElementType<{ id: string }>;
   title: string;
@@ -23,7 +23,7 @@ type SubHeader = {
   mb?: number;
 };
 
-function SubHeader({
+function SubHeader<T = string>({
   onClick,
   id,
   title,
@@ -38,7 +38,7 @@ function SubHeader({
   isHiddenSaveButton = false,
   mb = 1,
   goBack,
-}: SubHeader) {
+}: SubHeader<T>) {
   const navigate = useNavigate();
   if (!goBack) goBack = () => navigate(-1);
 
@@ -57,7 +57,7 @@ function SubHeader({
           <>
             {id && !isEdit ? (
               DeleteButton ? (
-                <DeleteButton id={id} />
+                <DeleteButton id={id as string} />
               ) : null
             ) : (
               <Button onClick={goBack} variant="link" size="sm" isDisabled={loading}>

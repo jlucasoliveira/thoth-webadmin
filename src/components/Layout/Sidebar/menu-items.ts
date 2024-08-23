@@ -1,10 +1,16 @@
 import { FC } from 'react';
-import { ReactComponent as ClientIcon } from '@/assets/icons/sidebar/cliente.svg';
-import { ReactComponent as PermissionIcon } from '@/assets/icons/sidebar/permissoes.svg';
-import { ReactComponent as FornecedoresIcon } from '@/assets/icons/sidebar/fornecedor.svg';
-import { ReactComponent as LubrificanteIcon } from '@/assets/icons/sidebar/lubrificante.svg';
-import { ReactComponent as EstoqueIcon } from '@/assets/icons/sidebar/estoque.svg';
-import { ReactComponent as PlanIcon } from '@/assets/icons/sidebar/plano.svg';
+import {
+  BadgeDollarSign,
+  Building,
+  Building2,
+  Landmark,
+  LibraryBig,
+  Lock,
+  Receipt,
+  Users,
+  UserRoundCheck,
+  Warehouse,
+} from 'lucide-react';
 import { UserRoutes } from '@/features/users/routes/constants';
 import { ClientRoutes } from '@/features/clients/routes/constants';
 import { StockRoutes } from '@/features/stock/routes/constants';
@@ -12,6 +18,7 @@ import { ProductRoutes } from '@/features/products/routes/constants';
 import { BrandsRoutes } from '@/features/brands/routes/constants';
 import { CategoriesRoutes } from '@/features/categories/routes/constants';
 import { BankAccountsRoutes } from '@/features/bankAccounts/routes/constants';
+import { ExpenseRoutes } from '@/features/expenses/routes/constants';
 import { OrderRoutes } from '@/features/orders/routes/constants';
 
 type _Children = {
@@ -35,54 +42,60 @@ export const options: Menu = {
       id: 'user-permissions',
       label: 'Permissões',
       to: '/user-permissions',
-      icon: PermissionIcon,
+      icon: Lock,
     },
     {
       id: 'users',
       label: 'Usuários',
-      icon: ClientIcon,
+      icon: Users,
       to: UserRoutes.Users,
     },
     {
       id: 'clients',
       label: 'Clientes',
-      icon: ClientIcon,
+      icon: UserRoundCheck,
       to: ClientRoutes.List,
-    },
-    {
-      id: 'accounts',
-      label: 'Contas bancárias',
-      icon: ClientIcon,
-      to: BankAccountsRoutes.List,
     },
     {
       id: 'brands',
       label: 'Marcas',
-      icon: FornecedoresIcon,
+      icon: Building,
       to: BrandsRoutes.List,
     },
     {
       id: 'categories',
       label: 'Categorias',
-      icon: FornecedoresIcon,
+      icon: Building2,
       to: CategoriesRoutes.List,
     },
     {
       id: 'products',
       label: 'Produtos',
-      icon: LubrificanteIcon,
+      icon: LibraryBig,
       to: ProductRoutes.List,
     },
     {
       id: 'stocks',
       label: 'Gestão de estoque',
-      icon: EstoqueIcon,
+      icon: Warehouse,
       to: StockRoutes.List,
+    },
+    {
+      id: 'accounts',
+      label: 'Contas bancárias',
+      icon: Landmark,
+      to: BankAccountsRoutes.List,
+    },
+    {
+      id: 'expenses',
+      label: 'Despesas',
+      to: ExpenseRoutes.List,
+      icon: Receipt,
     },
     {
       id: 'orders',
       label: 'Vendas',
-      icon: PlanIcon,
+      icon: BadgeDollarSign,
       to: OrderRoutes.List,
     },
   ],

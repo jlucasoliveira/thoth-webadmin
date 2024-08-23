@@ -5,7 +5,7 @@ import { Filter } from '@/types/pagination';
 import { ProductList } from '../components/ProductList';
 import { StockRoutes } from './constants';
 
-const filters: Option<ProductVariationModel>[] = [
+const filters: Option<Omit<ProductVariationModel, 'product'>>[] = [
   {
     key: 'stock.quantity',
     label: 'Estoque',

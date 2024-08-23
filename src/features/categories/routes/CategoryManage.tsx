@@ -4,7 +4,7 @@ import { useFilters } from '@/hooks/useFilters';
 import { extractChangedValues } from '@/utils/helpers';
 import { FormType, CategoryManageForm } from '../components/CategoryManageForm';
 import { Payload, useCreateCategory } from '../api/createCategory';
-import { useCategoryPartialUpdate } from '../api/partialUpdateCateory';
+import { useCategoryPartialUpdate } from '../api/partialUpdateCategory';
 import { useGetCategory } from '../api/getCategory';
 import { CategoriesRoutes } from './constants';
 
