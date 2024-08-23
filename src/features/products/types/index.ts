@@ -26,4 +26,5 @@ export type ProductModel = BaseEntityInt & {
   brandId: number;
 
   readonly brand: BrandModel;
+  readonly variations: ProductVariationModel[];
 };

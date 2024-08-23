@@ -1,17 +1,20 @@
-import { useMemo } from 'react';
+import { Filter } from '@/types/pagination';
 import { ListWrapper } from '@/components/Layout';
-import { generateDefaultIsActiveFilters } from '@/components/Elements';
 import { ProductList } from '../components/ProductList';
+import { ProductModel } from '../types';
 import { ProductRoutes } from './constants';
 
-function Products() {
-  const filters = useMemo(generateDefaultIsActiveFilters, []);
+const searchBuilder = (ilike: string): Filter<ProductModel> => [
+  { name: { ilike } },
+  { variations: { variation: { ilike } } },
+  { variations: { externalCode: { ilike } } },
+];
 
+function Products() {
   return (
     <ListWrapper
       title="Produtos"
-      filters={filters}
-      searchField="name"
+      searchBuilder={searchBuilder}
       registrationRoute={ProductRoutes.Registration}
       List={ProductList}
     />
