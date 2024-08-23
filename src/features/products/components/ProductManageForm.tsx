@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDisclosure } from '@chakra-ui/react';
 import { Path, Resolver, useForm } from 'react-hook-form';
@@ -9,10 +9,12 @@ import { Form, Input, SearchableSelect } from '@/components/Form';
 import { DeleteButton } from '@/components/Helpers';
 import { BrandModel } from '@/features/brands/types';
 import { useBrands } from '@/features/brands/api/getBrands';
+import { BrandsRoutes } from '@/features/brands/routes/constants';
+import { useFilters } from '@/hooks/useFilters';
 import { FormProps } from '@/types/props';
+import { VARIATION_ID } from '../utils/params';
 import { ProductModel } from '../types';
 import { useDeleteProduct } from '../api/deleteProduct';
-import { ProductRoutes } from '../routes/constants';
 import { FormType, schema } from './Forms/validation';
 import { Variations } from './Variations/Variations';
 
@@ -28,7 +30,8 @@ function ProductManageForm({
   ...props
 }: FormProps<FormType, ProductModel>) {
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { getParam } = useFilters({ context: 'variations' });
+  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !!getParam(VARIATION_ID) });
   const { control, handleSubmit, setValue } = useForm<FormType>({
     context: { isNewEntry: !props.id },
     defaultValues,
@@ -64,7 +67,6 @@ function ProductManageForm({
         loading={props.loading}
         DeleteButton={() => <DeleteButton id={props.id!} useMutation={useDeleteProduct} />}
         onClick={handleSubmit(onSubmit)}
-        goBack={() => navigate(ProductRoutes.List)}
         title={title}
       />
       <Form loading={fetchingLoading}>
@@ -82,6 +84,9 @@ function ProductManageForm({
             useFetch={useBrands}
             defaultOptionValue={data?.brandId}
             handleSetValue={(option) => setValue('brand', option)}
+            viewRoute={(brand) =>
+              navigate(generatePath(BrandsRoutes.View, { id: brand.id.toString() }))
+            }
           />
         </FieldsContainer>
         <Variations
