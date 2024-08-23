@@ -8,7 +8,9 @@ import {
   Path,
   useController,
 } from 'react-hook-form';
-import { useTheme } from '@chakra-ui/react';
+import { Flex, IconButton, useTheme } from '@chakra-ui/react';
+import { ViewIcon } from '@chakra-ui/icons';
+import { iterableOR } from '@/utils/helpers';
 import { UseFetch } from '@/lib/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { BaseEntity } from '@/types/common';
@@ -36,6 +38,7 @@ export type SearchableSelectProps<
     refetch?: boolean;
     forceFetch?: boolean;
     searchBuilder?: SearchBuilder<F>;
+    viewRoute?: (obj: F) => void;
   };
 
 function SearchableSelect<
@@ -62,6 +65,7 @@ function SearchableSelect<
   forceFetch = false,
   isMulti,
   searchBuilder,
+  viewRoute,
   ...props
 }: SearchableSelectProps<F, T, IsMulti, P>) {
   const isMounted = useRef<boolean>(false);
@@ -133,7 +137,7 @@ function SearchableSelect<
       if (action.action === 'select-option') {
         onChange(value);
         if (search) setSearch(undefined);
-      }
+      } else if (action.action === 'remove-value') onChange(value);
     },
     [search]
   );
@@ -155,26 +159,38 @@ function SearchableSelect<
       childErrorAttrName={childErrorAttrName}
     >
       {({ field, fieldState }) => (
-        <Select
-          styles={{
-            control: (base) => getControlStyles(base, fieldState),
-            menu: (base) => ({ ...base, zIndex: 3 }),
-            ...props.styles,
-          }}
-          isSearchable
-          {...props}
-          {...field}
-          isMulti={isMulti}
-          loadingMessage={() => <Loading size="sm" />}
-          noOptionsMessage={() => 'Nenhuma opção disponível'}
-          getOptionValue={(option) => (option as BaseEntity).id?.toString()}
-          placeholder={props.placeholder ? props.placeholder : 'Selecione'}
-          options={fetched.data?.data ?? []}
-          onChange={(...args) => handleChange(field.onChange, ...args)}
-          required={required}
-          isLoading={fetched.isFetching && fetched.isLoading}
-          onInputChange={onInputChange}
-        />
+        <Flex flex="1" direction="row" alignItems="center">
+          <Select
+            styles={{
+              control: (base) => getControlStyles(base, fieldState),
+              menu: (base) => ({ ...base, zIndex: 3 }),
+              container: (base) => ({ ...base, flexGrow: 1 }),
+              ...props.styles,
+            }}
+            isSearchable
+            {...props}
+            {...field}
+            isMulti={isMulti}
+            loadingMessage={() => <Loading size="sm" />}
+            noOptionsMessage={() => 'Nenhuma opção disponível'}
+            getOptionValue={(option) => (option as BaseEntity).id?.toString()}
+            placeholder={props.placeholder ? props.placeholder : 'Selecione'}
+            options={fetched.data?.data ?? []}
+            onChange={(...args) => handleChange(field.onChange, ...args)}
+            required={required}
+            isLoading={fetched.isFetching && fetched.isLoading}
+            onInputChange={onInputChange}
+          />
+          {!isMulti && viewRoute && (defaultOptionValue || iterableOR(defaultOption as any)) ? (
+            <IconButton
+              variant="ghost"
+              aria-label={`Ver ${label}`}
+              icon={<ViewIcon color="gray.460" />}
+              onClick={() => viewRoute(field.value)}
+              size="sm"
+            />
+          ) : null}
+        </Flex>
       )}
     </FieldWrapper>
   );
