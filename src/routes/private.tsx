@@ -9,6 +9,7 @@ const { StockRoutes } = lazyImport(() => import('@/features/stock'), 'StockRoute
 const { UserRoutes } = lazyImport(() => import('@/features/users'), 'UserRoutes');
 const { OrderRoutes } = lazyImport(() => import('@/features/orders'), 'OrderRoutes');
 const { ClientRoutes } = lazyImport(() => import('@/features/clients'), 'ClientRoutes');
+const { ExpenseRoutes } = lazyImport(() => import('@/features/expenses'), 'ExpenseRoutes');
 const { BankAccountsRoutes } = lazyImport(
   () => import('@/features/bankAccounts'),
   'BankAccountsRoutes'
@@ -27,6 +28,7 @@ const privateRoutes: RouteObject[] = [
       { path: 'orders/*', element: <OrderRoutes /> },
       { path: 'clients/*', element: <ClientRoutes /> },
       { path: 'accounts/*', element: <BankAccountsRoutes /> },
+      { path: 'expenses/*', element: <ExpenseRoutes /> },
     ],
   },
 ];
