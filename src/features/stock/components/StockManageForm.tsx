@@ -1,11 +1,14 @@
 import { useEffect, useMemo } from 'react';
+import { Button } from '@chakra-ui/react';
 import { Resolver, useForm } from 'react-hook-form';
 import { InferType, number, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { FormProps } from '@/types/props';
 import { SubHeader, ManageWrapper } from '@/components/Layout';
 import { Form, Input } from '@/components/Form';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
+import { ProductRoutes } from '@/features/products/routes/constants';
 import { BrandModel } from '@/features/brands/types';
 import { ProductVariationModel } from '@/features/products/types';
 import { StockLaunchForm } from '@/features/stock/components/StockLaunchForm';
@@ -46,6 +49,7 @@ function StockManageForm({
   brand,
   ...props
 }: Props & FormProps<FormType, ProductVariationModel>) {
+  const navigate = useNavigate();
   const { control, handleSubmit, setValue } = useForm({
     defaultValues,
     resolver: yupResolver(schema) as Resolver<FormType>,
@@ -73,7 +77,30 @@ function StockManageForm({
 
   return (
     <ManageWrapper>
-      <SubHeader {...props} onClick={handleSubmit(onSubmit)} title="Estoque dos produtos" />
+      <SubHeader
+        {...props}
+        onClick={handleSubmit(onSubmit)}
+        rightActions={
+          <Button
+            ml="2"
+            size="sm"
+            colorScheme="blue"
+            isLoading={props.fetchingLoading}
+            onClick={() => {
+              const pathname = generatePath(ProductRoutes.View, {
+                id: data!.productId!.toString(),
+              });
+              navigate({
+                pathname,
+                search: `variations|variationId=${data!.id}`,
+              });
+            }}
+          >
+            Ver Produto
+          </Button>
+        }
+        title="Estoque dos produtos"
+      />
       <Form loading={props.fetchingLoading}>
         <FieldsContainer title="Dados do produto">
           <Input isDisabled control={control} name="variation" label="Identificação" />
