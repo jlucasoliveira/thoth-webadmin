@@ -1,8 +1,10 @@
 import { useEffect, useMemo } from 'react';
-import { InferType, object, string } from 'yup';
+import { InferType, mixed, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Path, Resolver, useForm } from 'react-hook-form';
-import { Form, Input } from '@/components/Form';
+import { BrandModel } from '@/features/brands/types';
+import { useBrands } from '@/features/brands/api/getBrands';
+import { Form, Input, SearchableSelect } from '@/components/Form';
 import { DeleteButton } from '@/components/Helpers';
 import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { SubHeader, ManageWrapper } from '@/components/Layout';
@@ -13,6 +15,7 @@ import { useDeleteCategory } from '../api/deleteCategory';
 const schema = object().shape({
   id: string().optional(),
   name: string().required('Campo obrigatório'),
+  brand: mixed<BrandModel>().optional(),
 });
 
 export type FormType = InferType<typeof schema>;
@@ -50,7 +53,7 @@ function CategoryManageForm({
   useEffect(() => {
     if (data) {
       Object.entries(data).forEach(([key, value]) => {
-        setValue(key as Path<FormType>, value.toString());
+        if (value) setValue(key as Path<FormType>, value.toString());
       });
     }
   }, [data, setValue]);
@@ -68,6 +71,16 @@ function CategoryManageForm({
       <Form loading={fetchingLoading}>
         <FieldsContainer title="Dados da categoria" templateColumn={3}>
           <Input control={control} name="name" label="Nome" isDisabled={!isFormEdit} required />
+          <SearchableSelect
+            control={control}
+            name="brand"
+            label="Marca"
+            useFetch={useBrands}
+            getOptionLabel={(brand) => brand.name}
+            defaultOptionValue={data?.brandId}
+            handleSetValue={(brand) => setValue('brand', brand)}
+            isDisabled={!isFormEdit}
+          />
         </FieldsContainer>
       </Form>
     </ManageWrapper>

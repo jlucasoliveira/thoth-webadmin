@@ -5,7 +5,7 @@ import { MutationConfig, queryClient } from '@/lib/react-query';
 import { useNotificationStore } from '@/stores/notifications';
 import { CategoryModel } from '../types';
 
-export type Payload = Pick<CategoryModel, 'name'>;
+export type Payload = Pick<CategoryModel, 'name' | 'brandId'>;
 
 async function createCategory(payload: Payload) {
   return axios.post<CategoryModel>(`/categories`, payload);
