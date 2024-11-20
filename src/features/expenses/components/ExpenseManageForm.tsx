@@ -61,7 +61,7 @@ function ExpenseManageForm(props: FormProps<FormType, ExpenseModel, { id: number
             getOptionLabel={(brand) => brand.name}
             defaultOptionValue={props.data?.brandId}
             handleSetValue={(brand) => setValue('brand', brand)}
-            isDisabled={isFormEdit}
+            isDisabled={!isFormEdit}
           />
           <SearchableSelect
             isRequired
@@ -72,22 +72,22 @@ function ExpenseManageForm(props: FormProps<FormType, ExpenseModel, { id: number
             getOptionLabel={(account) => account.name}
             defaultOptionValue={props.data?.bankAccountId}
             handleSetValue={(bankAccount) => setValue('account', bankAccount)}
-            isDisabled={isFormEdit}
+            isDisabled={!isFormEdit}
           />
-          <Input isRequired control={control} name="value" label="Valor" isDisabled={isFormEdit} />
+          <Input isRequired control={control} name="value" label="Valor" isDisabled={!isFormEdit} />
           <Input
             isRequired
             control={control}
             name="installments"
             label="Parcelas"
-            isDisabled={isFormEdit}
+            isDisabled={!isFormEdit}
           />
           <Checkbox
             isRequired
             control={control}
             name="isPaid"
             label="Foi Pago"
-            isDisabled={isFormEdit}
+            isDisabled={!isFormEdit}
           />
         </FieldsContainer>
       </Form>
