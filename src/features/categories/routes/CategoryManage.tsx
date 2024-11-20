@@ -17,7 +17,10 @@ function CategoryManage() {
   const update = useCategoryPartialUpdate();
 
   function parseFormTypeToPayload(data: FormType): Payload {
-    return { name: data.name };
+    return {
+      name: data.name,
+      brandId: data.brand?.id
+    };
   }
 
   async function onSubmit(data: FormType) {
