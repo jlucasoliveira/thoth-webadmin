@@ -15,6 +15,11 @@ function Layout({ children }: LayoutType) {
       alignItems="stretch"
       flexDirection="row"
       paddingY={50}
+      css={`
+        @media (max-width: 1000px) {
+          flex-direction: column;
+        }
+      `}
     >
       {children}
     </Box>
