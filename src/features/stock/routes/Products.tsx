@@ -3,6 +3,7 @@ import { Option } from '@/components/Elements';
 import { ProductVariationModel } from '@/features/products/types';
 import { Filter } from '@/types/pagination';
 import { ProductList } from '../components/ProductList';
+import { StockExportCSV } from '../components/ExportCSV';
 import { StockRoutes } from './constants';
 
 const filters: Option<Omit<ProductVariationModel, 'product'>>[] = [
@@ -34,6 +35,7 @@ function Products() {
       searchBuilder={searchBuilder}
       registrationRoute={StockRoutes.Registration}
       addButtonText="Adição em massa"
+      RightAction={<StockExportCSV />}
     />
   );
 }
