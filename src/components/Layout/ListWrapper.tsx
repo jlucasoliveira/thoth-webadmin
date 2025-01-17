@@ -51,6 +51,8 @@ type ListWrapper<T extends object> = {
   searchField?: keyof T | string;
   tabs?: Tab[];
   containerProps?: FlexProps;
+  RightAction?: ReactNode;
+  hideSearch?: boolean;
   searchBuilder?: SearchBuilder<T>;
 };
 
@@ -65,6 +67,8 @@ function ListWrapper<T extends object>({
   FilterElement,
   containerProps,
   tabs = [],
+  RightAction,
+  hideSearch = false,
   searchBuilder,
 }: ListWrapper<T>) {
   const [isSmallScreenSize] = useMediaQuery('(max-width: 1100px)');
@@ -116,12 +120,14 @@ function ListWrapper<T extends object>({
           {memoTitle}
         </Heading>
         <Flex direction="row" alignItems="center" gap={isSmallScreenSize ? 3 : 1}>
-          <Search
-            control={control}
-            name="search"
-            handleSearch={handleSubmit(onSubmit)}
-            clearSearch={onCleanSearchField}
-          />
+          {hideSearch ? null : (
+            <Search
+              control={control}
+              name="search"
+              handleSearch={handleSubmit(onSubmit)}
+              clearSearch={onCleanSearchField}
+            />
+          )}
           {FilterElement ? (
             <FilterElement />
           ) : filters.length > 0 ? (
@@ -144,6 +150,7 @@ function ListWrapper<T extends object>({
               {addButtonText || 'Novo'}
             </Button>
           ) : null}
+          {RightAction}
         </Flex>
       </Flex>
 

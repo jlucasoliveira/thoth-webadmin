@@ -9,6 +9,12 @@ import { FieldsContainer } from '@/components/Form/FieldsContainer';
 import { useDeleteClient } from '../api/deleteClient';
 import { ClientModel } from '../types';
 import { FormType, schema, defaultValues } from './validation';
+import { phoneMask } from '@/utils/format';
+
+function format(key: keyof ClientModel, value: any): string {
+  if (key === 'phoneNumber') return phoneMask(value);
+  return value.toString();
+}
 
 function ClientManageForm({
   onSubmit,
@@ -38,7 +44,7 @@ function ClientManageForm({
     if (data) {
       Object.entries(data).forEach(([key, value]) => {
         if (value) {
-          setValue(key as Path<FormType>, value.toString());
+          setValue(key as Path<FormType>, format(key as keyof ClientModel, value));
         }
       });
     }
@@ -69,7 +75,13 @@ function ClientManageForm({
             label="E-mail"
             type="email"
           />
-          <Input isDisabled={!isFormEdit} control={control} name="phoneNumber" label="Telefone" />
+          <Input
+            isDisabled={!isFormEdit}
+            control={control}
+            name="phoneNumber"
+            label="Telefone"
+            formatter={phoneMask}
+          />
         </FieldsContainer>
       </Form>
     </ManageWrapper>

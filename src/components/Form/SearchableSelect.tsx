@@ -138,6 +138,7 @@ function SearchableSelect<
         onChange(value);
         if (search) setSearch(undefined);
       } else if (action.action === 'remove-value') onChange(value);
+      else if (action.action === 'clear') onChange(undefined as any);
     },
     [search]
   );

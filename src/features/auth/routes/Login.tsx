@@ -9,7 +9,14 @@ function Login() {
       <Container css={container}>
         <BrandLogoAsset width={500} />
       </Container>
-      <Divider orientation="vertical" />
+      <Divider
+        orientation="vertical"
+        css={`
+          @media (max-width: 1000px) {
+            display: none;
+          }
+        `}
+      />
       <Container css={container} flexDirection="column">
         <LoginForm />
       </Container>

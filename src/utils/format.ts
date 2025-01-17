@@ -26,6 +26,7 @@ export function documentMask(document: string): string {
 export function phoneMask(phone: string): string {
   phone = sanitizeNumber(phone);
   phone = phone.replace(/(\d{2})(\d)/, '($1) $2');
+  phone = phone.replace(/\((\d{2})\)\s(\d{5})(\d)/, '($1) $2-$3');
   return phone;
 }
 
@@ -61,4 +62,10 @@ export function dateFormat(value: string | Date | number | null): string {
   if (typeof value === 'string') value = new Date(value);
 
   return new Intl.DateTimeFormat('pt-br', { dateStyle: 'short' }).format(value);
+}
+
+export function extractNaiveDate(date: Date | string | number): string {
+  if (typeof date !== 'string') date = new Date(date).toJSON();
+
+  return date.split('T', 1)[0];
 }
