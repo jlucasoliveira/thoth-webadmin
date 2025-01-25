@@ -36,7 +36,6 @@ export function Form({ append }: FormProps) {
           useFetch={useVariations}
           fetcherExtraParams={{
             include: { stock: true, product: true },
-            filter: { stock: { quantity: { gt: 0 } } },
           }}
           searchBuilder={(ilike) => [
             { variation: { ilike } },
